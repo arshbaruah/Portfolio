@@ -237,7 +237,7 @@ function EntryCard({ logo, initial, color, title, subtitle, meta, bullets, expan
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.5rem" }}>
             <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.05rem", fontWeight: 600, color: T.white, margin: 0, lineHeight: 1.3 }}>{title}</p>
-            <span style={{ color: T.textDim, fontSize: "0.75rem", flexShrink: 0, marginTop: "2px", transition: "transform 0.2s", display: "inline-block", transform: expanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
+            <span style={{ color: T.textDim, fontSize: "0.75rem", flexShrink: 0, marginTop: "2px", transition: "transform 0.35s ease", display: "inline-block", transform: expanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "0.3rem 0.9rem", marginTop: "0.3rem" }}>
             {subtitle && <span style={{ fontSize: "0.77rem", color: T.textMid }}>{subtitle}</span>}
@@ -249,27 +249,34 @@ function EntryCard({ logo, initial, color, title, subtitle, meta, bullets, expan
           </div>
         </div>
       </div>
-      {expanded && bullets && (
-        <ul style={{ margin: "0.75rem 0 0 3rem", padding: 0, listStyle: "none" }}>
-          {bullets.map((b, i) => (
-            <li key={i} style={{ display: "flex", gap: "8px", marginBottom: "5px", fontSize: "0.81rem", color: T.textMid, lineHeight: 1.65 }}>
-              <span style={{ color: T.gold, flexShrink: 0, fontSize: "5px", marginTop: "8px" }}>◆</span>
-              <RichText text={b.text} bold={b.bold || []} />
-            </li>
-          ))}
-        </ul>
-      )}
+      <div style={{
+        overflow: "hidden",
+        maxHeight: expanded ? "600px" : "0px",
+        opacity: expanded ? 1 : 0,
+        transition: "max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease",
+      }}>
+        {bullets && (
+          <ul style={{ margin: "0.75rem 0 0 3rem", padding: 0, listStyle: "none" }}>
+            {bullets.map((b, i) => (
+              <li key={i} style={{ display: "flex", gap: "8px", marginBottom: "5px", fontSize: "0.81rem", color: T.textMid, lineHeight: 1.65 }}>
+                <span style={{ color: T.gold, flexShrink: 0, fontSize: "5px", marginTop: "8px" }}>◆</span>
+                <RichText text={b.text} bold={b.bold || []} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </Card>
   );
 }
 
-function AnimatedTagline({ goTo }) {
+function AnimatedTagline({ goTo, openCard }) {
   const items = [
-    { text: "Building a Startup",          color: T.gold,    section: "extracurriculars" },
-    { text: "12K+ Followers on Instagram", color: "#a78bfa", section: "extracurriculars", url: "https://www.instagram.com/arshb.mp4/" },
-    { text: "Ex-SMBC Intern",              color: "#6ee7b7", section: "experience" },
-    { text: "Secretary, Business Society", color: "#fbbf24", section: "extracurriculars" },
-    { text: "Debater",                     color: "#f87171", section: "extracurriculars" },
+    { text: "Building a Startup",          color: T.gold,    section: "extracurriculars", cardKey: "ext0" },
+    { text: "12K+ Followers on Instagram", color: "#a78bfa", section: "extracurriculars", url: "https://www.instagram.com/arshb.mp4/", cardKey: "ext1" },
+    { text: "Ex-SMBC Intern",              color: "#6ee7b7", section: "experience",       cardKey: "exp0" },
+    { text: "Secretary, Business Society", color: "#fbbf24", section: "extracurriculars", cardKey: "ext2" },
+    { text: "Debater",                     color: "#f87171", section: "extracurriculars", cardKey: "ext4" },
   ];
   const [hovered, setHovered] = useState(null);
   return (
@@ -278,7 +285,11 @@ function AnimatedTagline({ goTo }) {
         <span key={i}
           onMouseEnter={() => setHovered(i)}
           onMouseLeave={() => setHovered(null)}
-          onClick={() => item.url ? window.open(item.url, "_blank") : goTo(item.section)}
+          onClick={() => {
+            if (item.url) { window.open(item.url, "_blank"); return; }
+            openCard(item.cardKey);
+            goTo(item.section);
+          }}
           style={{
             padding: "6px 14px", borderRadius: 20, fontSize: "0.78rem",
             fontFamily: "monospace", letterSpacing: "0.04em",
@@ -302,12 +313,16 @@ function CtaButton({ label, primary, onClick }) {
   return (
     <button onClick={onClick} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
       style={{
-        padding: "8px 18px",
+        padding: "12px 24px",
         background: hov ? T.white : (primary ? T.gold : "transparent"),
         color: hov ? T.bg : (primary ? T.bg : T.gold),
         border: `1px solid ${hov ? T.white : (primary ? T.gold : T.goldDim)}`,
-        borderRadius: 8, fontFamily: "monospace", fontSize: "0.65rem",
-        letterSpacing: "0.08em", cursor: "pointer", transition: "all 0.2s",
+        borderRadius: 10, fontFamily: "monospace", fontSize: "0.75rem",
+        letterSpacing: "0.08em", cursor: "pointer",
+        transition: "all 0.25s cubic-bezier(0.4,0,0.2,1)",
+        transform: hov ? "translateY(-2px)" : "translateY(0)",
+        boxShadow: hov ? (primary ? `0 6px 24px rgba(201,169,110,0.3)` : `0 6px 20px rgba(201,169,110,0.15)`) : "none",
+        fontWeight: primary ? 700 : 400,
       }}>
       {label}
     </button>
@@ -353,8 +368,15 @@ function DownloadCVButton() {
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("intro");
   const [expanded, setExpanded] = useState({});
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const rightRef = useRef(null);
   const sectionRefs = useRef({});
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const el = rightRef.current;
@@ -382,22 +404,36 @@ export default function Portfolio() {
   };
 
   const toggle = (key) => setExpanded(p => ({ ...p, [key]: !p[key] }));
+  const openCard = (key) => setExpanded(p => ({ ...p, [key]: true }));
 
   return (
-    <div style={{ display: "flex", height: "100vh", background: T.bg, fontFamily: "'Lato', sans-serif", color: T.text, overflow: "hidden" }}>
+    <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", height: "100vh", background: T.bg, fontFamily: "'Lato', sans-serif", color: T.text, overflow: "hidden" }}>
       <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
 
       {/* SIDEBAR */}
-      <aside style={{ width: 272, flexShrink: 0, background: T.sidebar, borderRight: `1px solid ${T.border}`, overflowY: "auto", padding: "1.8rem 1.5rem 2rem 1.8rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+      <aside style={{
+        width: isMobile ? "100%" : 272,
+        flexShrink: 0,
+        background: T.sidebar,
+        borderRight: isMobile ? "none" : `1px solid ${T.border}`,
+        borderBottom: isMobile ? `1px solid ${T.border}` : "none",
+        overflowY: isMobile ? "visible" : "auto",
+        padding: isMobile ? "1.2rem 1.2rem 1rem" : "1.8rem 1.5rem 2rem 1.8rem",
+        display: "flex",
+        flexDirection: isMobile ? "row" : "column",
+        flexWrap: isMobile ? "wrap" : "nowrap",
+        gap: isMobile ? "0.8rem 1.5rem" : "1.5rem",
+        alignItems: isMobile ? "flex-start" : "stretch",
+      }}>
 
         <div>
-          <div style={{ width: 68, height: 68, borderRadius: "50%", background: "linear-gradient(135deg, #1a1a2e 0%, #2a1a0e 100%)", border: `2px solid ${T.gold}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem", boxShadow: "0 0 22px rgba(201,169,110,0.25)" }}>
-            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.5rem", fontWeight: 700, color: T.gold, letterSpacing: "0.02em" }}>AB</span>
+          <div style={{ width: isMobile ? 48 : 68, height: isMobile ? 48 : 68, borderRadius: "50%", background: "linear-gradient(135deg, #1a1a2e 0%, #2a1a0e 100%)", border: `2px solid ${T.gold}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: isMobile ? "0.5rem" : "1rem", boxShadow: "0 0 22px rgba(201,169,110,0.25)" }}>
+            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: isMobile ? "1.1rem" : "1.5rem", fontWeight: 700, color: T.gold, letterSpacing: "0.02em" }}>AB</span>
           </div>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.35rem", fontWeight: 600, color: T.white, margin: 0, lineHeight: 1.2 }}>{data.name}</p>
+          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: isMobile ? "1.1rem" : "1.35rem", fontWeight: 600, color: T.white, margin: 0, lineHeight: 1.2 }}>{data.name}</p>
         </div>
 
-        <div>
+        <div style={{ display: isMobile ? "none" : "block" }}>
           <SLabel>About</SLabel>
           <p style={{ fontSize: "0.78rem", color: T.textMid, lineHeight: 1.8, margin: 0, fontWeight: 300 }}>{data.about}</p>
         </div>
@@ -435,7 +471,7 @@ export default function Portfolio() {
           </div>
         </div>
 
-        <div>
+        <div style={{ display: isMobile ? "none" : "block" }}>
           <SLabel>Technical Skills</SLabel>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", marginBottom: "0.85rem" }}>
             {data.skills.technical.map(s => (
@@ -454,7 +490,7 @@ export default function Portfolio() {
           </div>
         </div>
 
-        <div>
+        <div style={{ display: isMobile ? "none" : "block" }}>
           <SLabel>Languages</SLabel>
           <div style={{ display: "flex", flexDirection: "row", gap: "5px" }}>
             {data.languages.map(l => (
@@ -465,7 +501,7 @@ export default function Portfolio() {
       </aside>
 
       {/* RIGHT PANEL */}
-      <div ref={rightRef} style={{ flex: 1, overflowY: "auto", padding: "2rem 2.5rem 7rem 2.5rem" }}>
+      <div ref={rightRef} style={{ flex: 1, overflowY: "auto", padding: isMobile ? "1.5rem 1rem 7rem" : "2rem 2.5rem 7rem 2.5rem" }}>
 
         {/* INTRO */}
         <div ref={el => sectionRefs.current["intro"] = el} style={{ marginBottom: "3rem", paddingTop: "0.3rem" }}>
@@ -473,7 +509,7 @@ export default function Portfolio() {
           <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(2rem, 4vw, 3.2rem)", fontWeight: 600, lineHeight: 1.1, margin: "0 0 1.4rem", color: T.white }}>
             Hi, I&apos;m <span style={{ color: T.gold }}>Arsh Baruah</span>.
           </h1>
-          <AnimatedTagline goTo={goTo} />
+          <AnimatedTagline goTo={goTo} openCard={openCard} />
           <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
             {CTA_BUTTONS.map(({ label, section, primary }) => (
               <CtaButton key={section} label={label} primary={primary} onClick={() => goTo(section)} />
@@ -536,7 +572,7 @@ export default function Portfolio() {
         {/* CERTIFICATIONS */}
         <div ref={el => sectionRefs.current["certifications"] = el} style={{ marginBottom: "2.5rem" }}>
           <SLabel>Certifications & Courses</SLabel>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.45rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "0.45rem" }}>
             {data.courses.map((c, i) => (
               <Card key={i} style={{ padding: "0.85rem 1rem" }}>
                 <p style={{ fontSize: "0.82rem", fontWeight: 700, color: T.text, marginBottom: "4px" }}>{c.name}</p>
@@ -569,7 +605,7 @@ export default function Portfolio() {
             <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.9rem", color: T.white, fontWeight: 500, margin: "0 0 1.3rem", lineHeight: 1.2 }}>
               Let&apos;s connect<span style={{ color: T.gold }}>.</span>
             </p>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.8rem" }}>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "0.8rem" }}>
               {[
                 { label: "Email",    value: data.email,                   href: "mailto:" + data.email },
                 { label: "Phone",    value: data.phone,                   href: "tel:" + data.phone },
