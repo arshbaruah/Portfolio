@@ -140,6 +140,8 @@ const data = {
     { title: "Article Featured in Hindustan Times", date: "Mar 2021", note: "" },
     { title: "Invited to Perform Live at a Delhi University College", date: "Feb 2026", note: "" },
     { title: "First Division — Music Exams (Years 1, 2 & 3, Vocal)", date: "2018–2020", note: "" },
+    { title: "Fed 180 Homeless People on 18th Birthday", date: "2023", note: "Personal initiative", compact: false },
+    { title: "Fed 190 Homeless People on 19th Birthday", date: "2024", note: "Personal initiative", compact: false },
   ],
 };
 
@@ -230,14 +232,32 @@ function SLabel({ children }) {
 }
 
 function EntryCard({ logo, initial, color, title, subtitle, meta, bullets, expanded, onToggle }) {
+  const wrapRef = useRef(null);
+  const toggleRef = useRef(onToggle);
+  useEffect(() => { toggleRef.current = onToggle; });
+
+  useEffect(() => {
+    if (!expanded) return;
+    const el = wrapRef.current;
+    if (!el) return;
+    let initialFire = true;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (initialFire) { initialFire = false; return; }
+      if (!entry.isIntersecting) toggleRef.current();
+    }, { threshold: 0.1 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [expanded]);
+
   return (
+    <div ref={wrapRef}>
     <Card style={{ marginBottom: "0.55rem" }} onClick={onToggle}>
       <div style={{ display: "flex", alignItems: "flex-start", gap: "0.85rem" }}>
         <LogoAvatar logo={logo} initial={initial} color={color} size={36} />
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.5rem" }}>
             <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.05rem", fontWeight: 600, color: T.white, margin: 0, lineHeight: 1.3 }}>{title}</p>
-            <span style={{ color: T.textDim, fontSize: "0.75rem", flexShrink: 0, marginTop: "2px", transition: "transform 0.35s ease", display: "inline-block", transform: expanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
+            <span style={{ color: T.textDim, fontSize: "0.75rem", flexShrink: 0, marginTop: "2px", transition: "transform 0.38s ease", display: "inline-block", transform: expanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "0.3rem 0.9rem", marginTop: "0.3rem" }}>
             {subtitle && <span style={{ fontSize: "0.77rem", color: T.textMid }}>{subtitle}</span>}
@@ -249,28 +269,26 @@ function EntryCard({ logo, initial, color, title, subtitle, meta, bullets, expan
           </div>
         </div>
       </div>
-      <div style={{
-        overflow: "hidden",
-        maxHeight: expanded ? "600px" : "0px",
-        opacity: expanded ? 1 : 0,
-        transition: "max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease",
-      }}>
-        {bullets && (
-          <ul style={{ margin: "0.75rem 0 0 3rem", padding: 0, listStyle: "none" }}>
-            {bullets.map((b, i) => (
-              <li key={i} style={{ display: "flex", gap: "8px", marginBottom: "5px", fontSize: "0.81rem", color: T.textMid, lineHeight: 1.65 }}>
-                <span style={{ color: T.gold, flexShrink: 0, fontSize: "5px", marginTop: "8px" }}>◆</span>
-                <RichText text={b.text} bold={b.bold || []} />
-              </li>
-            ))}
-          </ul>
-        )}
+      <div style={{ display: "grid", gridTemplateRows: expanded ? "1fr" : "0fr", transition: "grid-template-rows 0.42s cubic-bezier(0.4,0,0.2,1)" }}>
+        <div style={{ overflow: "hidden", opacity: expanded ? 1 : 0, transition: "opacity 0.42s ease" }}>
+          {bullets && (
+            <ul style={{ margin: "0.75rem 0 0 3rem", padding: 0, listStyle: "none" }}>
+              {bullets.map((b, i) => (
+                <li key={i} style={{ display: "flex", gap: "8px", marginBottom: "5px", fontSize: "0.81rem", color: T.textMid, lineHeight: 1.65 }}>
+                  <span style={{ color: T.gold, flexShrink: 0, fontSize: "5px", marginTop: "8px" }}>◆</span>
+                  <RichText text={b.text} bold={b.bold || []} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </Card>
+    </div>
   );
 }
 
-function AnimatedTagline({ goTo, openCard }) {
+function AnimatedTagline({ goTo, children }) {
   const items = [
     { text: "Building a Startup",          color: T.gold,    section: "extracurriculars", cardKey: "ext0" },
     { text: "12K+ Followers on Instagram", color: "#a78bfa", section: "extracurriculars", url: "https://www.instagram.com/arshb.mp4/", cardKey: "ext1" },
@@ -280,18 +298,17 @@ function AnimatedTagline({ goTo, openCard }) {
   ];
   const [hovered, setHovered] = useState(null);
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "1.6rem" }}>
+    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: 0, alignItems: "center" }}>
       {items.map((item, i) => (
         <span key={i}
           onMouseEnter={() => setHovered(i)}
           onMouseLeave={() => setHovered(null)}
           onClick={() => {
             if (item.url) { window.open(item.url, "_blank"); return; }
-            openCard(item.cardKey);
-            goTo(item.section);
+            goTo(item.section, item.cardKey);
           }}
           style={{
-            padding: "6px 14px", borderRadius: 20, fontSize: "0.78rem",
+            padding: "7px 16px", borderRadius: 20, fontSize: "0.78rem",
             fontFamily: "monospace", letterSpacing: "0.04em",
             border: `1px solid ${hovered === i ? item.color : T.border}`,
             color: hovered === i ? item.color : T.textMid,
@@ -304,6 +321,7 @@ function AnimatedTagline({ goTo, openCard }) {
           {item.text}
         </span>
       ))}
+      {children}
     </div>
   );
 }
@@ -330,12 +348,12 @@ function CtaButton({ label, primary, onClick }) {
 }
 
 const CTA_BUTTONS = [
-  { label: "Education",        section: "education",        primary: true },
-  { label: "Work",             section: "experience",       primary: false },
+  { label: "Education",        section: "education",        primary: false },
+  { label: "Work Experience", section: "experience",       primary: false },
   { label: "Extracurriculars", section: "extracurriculars", primary: false },
-  { label: "Skills",           section: "skills",           primary: false },
-  { label: "Certifications",   section: "certifications",   primary: false },
+  { label: "Skills & Certificates",  section: "skills",           primary: false },
   { label: "Achievements",     section: "achievements",     primary: false },
+  { label: "Contact Me",       section: "contact",          primary: false },
 ];
 
 function DownloadCVButton() {
@@ -351,26 +369,171 @@ function DownloadCVButton() {
   return (
     <button onClick={handleDownload} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
       style={{
-        padding: "8px 18px",
-        background: hov ? T.white : "transparent",
-        color: hov ? T.bg : T.textMid,
-        border: `1px solid ${hov ? T.white : T.border}`,
-        borderRadius: 8, fontFamily: "monospace", fontSize: "0.65rem",
-        letterSpacing: "0.08em", cursor: "pointer", transition: "all 0.2s",
+        padding: "7px 16px",
+        background: hov ? T.gold : "transparent",
+        color: hov ? T.bg : T.gold,
+        border: `1px solid ${hov ? T.gold : T.goldDim}`,
+        borderRadius: 20, fontFamily: "monospace", fontSize: "0.78rem",
+        letterSpacing: "0.04em", cursor: "pointer",
+        transition: "all 0.25s cubic-bezier(0.4,0,0.2,1)",
+        transform: hov ? "translateY(-2px)" : "translateY(0)",
+        boxShadow: hov ? "0 4px 20px rgba(201,169,110,0.25)" : "none",
+        fontWeight: 400,
         display: "flex", alignItems: "center", gap: "6px",
       }}>
-      ↓ Download CV
+      Download CV
     </button>
   );
 }
 
 
+function TypewriterName() {
+  const phases = [
+    { full: "a student",   split: 2 },
+    { full: "a learner",   split: 2 },
+    { full: "a musician",  split: 2 },
+    { full: "a builder",   split: 2 },
+    { full: "an artist",   split: 3 },
+    { full: "Arsh Baruah", split: 0 },
+  ];
+  const [phaseIdx, setPhaseIdx]     = useState(0);
+  const [charCount, setCharCount]   = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isDone, setIsDone]         = useState(false);
+  const [cursorOn, setCursorOn]     = useState(true);
+
+  // Blinking cursor — always runs
+  useEffect(() => {
+    const blink = setInterval(() => setCursorOn(v => !v), 520);
+    return () => clearInterval(blink);
+  }, []);
+
+  // Typing / deleting machine
+  // charCount goes 0 → fullLen (word) → fullLen+1 (period) then deletes back
+  useEffect(() => {
+    if (isDone) return;
+    const phase    = phases[phaseIdx];
+    const fullLen  = phase.full.length;
+    const isFinal  = phaseIdx === phases.length - 1;
+    const totalLen = fullLen + 1; // +1 for the period
+
+    let t;
+    if (!isDeleting) {
+      if (charCount < fullLen) {
+        // Type word characters
+        t = setTimeout(() => setCharCount(c => c + 1), isFinal ? 140 : 110);
+      } else if (charCount === fullLen) {
+        // Type the period with a natural keystroke delay
+        t = setTimeout(() => setCharCount(c => c + 1), 160);
+      } else {
+        // Period shown (charCount === totalLen)
+        if (!isFinal) {
+          t = setTimeout(() => setIsDeleting(true), 700);
+        } else {
+          setIsDone(true);
+        }
+      }
+    } else {
+      if (charCount > 0) {
+        t = setTimeout(() => setCharCount(c => c - 1), 55);
+      } else {
+        t = setTimeout(() => {
+          setPhaseIdx(i => i + 1);
+          setIsDeleting(false);
+        }, 280);
+      }
+    }
+    return () => clearTimeout(t);
+  }, [phaseIdx, charCount, isDeleting, isDone]);
+
+  const phase      = phases[phaseIdx];
+  const displayed  = phase.full.slice(0, Math.min(charCount, phase.full.length));
+  const split      = phase.split;
+  const whitePart  = displayed.slice(0, Math.min(split, displayed.length));
+  const goldPart   = displayed.slice(split);
+  const showPeriod = charCount > phase.full.length; // period is the +1 char
+
+  return (
+    <span>
+      {whitePart && <span style={{ color: T.white }}>{whitePart}</span>}
+      {goldPart  && <span style={{ color: T.gold  }}>{goldPart}</span>}
+      {showPeriod && <span style={{ color: T.white }}>.</span>}
+      <span style={{
+        display: "inline-block", width: "2px",
+        height: "0.72em", background: T.gold,
+        marginLeft: "3px", verticalAlign: "0",
+        opacity: cursorOn ? 1 : 0, transition: "opacity 0.08s",
+      }} />
+    </span>
+  );
+}
+
+function BigNavButton({ label, icon, onClick }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <button onClick={onClick} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      style={{
+        padding: "0 16px",
+        height: "100%",
+        minHeight: "120px",
+        background: hov ? "rgba(201,169,110,0.08)" : T.bgCard,
+        color: hov ? T.gold : T.textMid,
+        border: `1px solid ${hov ? T.goldDim : T.border}`,
+        borderRadius: 12,
+        fontFamily: "monospace",
+        fontSize: "0.9rem",
+        letterSpacing: "0.06em",
+        cursor: "pointer",
+        transition: "all 0.25s cubic-bezier(0.4,0,0.2,1)",
+        transform: hov ? "translateY(-3px)" : "translateY(0)",
+        boxShadow: hov ? "0 8px 24px rgba(201,169,110,0.12)" : "none",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "8px",
+        textAlign: "center",
+        width: "100%",
+      }}>
+      <span style={{ fontSize: "1.3rem", opacity: hov ? 1 : 0.45, transition: "opacity 0.25s" }}>{icon}</span>
+      <span>{label}</span>
+    </button>
+  );
+}
+
+function CustomCursor() {
+  const dotRef = useRef(null);
+  useEffect(() => {
+    const move = (e) => {
+      if (dotRef.current) {
+        dotRef.current.style.left = e.clientX + "px";
+        dotRef.current.style.top = e.clientY + "px";
+        dotRef.current.style.opacity = "1";
+      }
+    };
+    const hide = () => { if (dotRef.current) dotRef.current.style.opacity = "0"; };
+    window.addEventListener("mousemove", move);
+    document.addEventListener("mouseleave", hide);
+    return () => { window.removeEventListener("mousemove", move); document.removeEventListener("mouseleave", hide); };
+  }, []);
+  return (
+    <div ref={dotRef} style={{
+      position: "fixed", width: 9, height: 9, borderRadius: "50%",
+      background: "rgba(255,255,255,0.82)", pointerEvents: "none",
+      transform: "translate(-50%,-50%)", zIndex: 99999,
+      opacity: 0, transition: "opacity 0.2s",
+      mixBlendMode: "difference",
+    }} />
+  );
+}
+
+
 export default function Portfolio() {
-  const [activeSection, setActiveSection] = useState("intro");
   const [expanded, setExpanded] = useState({});
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [activePage, setActivePage] = useState("intro");
   const rightRef = useRef(null);
-  const sectionRefs = useRef({});
+  const pageRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -378,36 +541,192 @@ export default function Portfolio() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    const el = rightRef.current;
+  const navigate = (to, back = false, openKey = null) => {
+    const dir = back ? -1 : 1;
+    const el = pageRef.current;
     if (!el) return;
-    const onScroll = () => {
-      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 10;
-      if (atBottom) {
-        setActiveSection("contact");
-        return;
-      }
-      let found = "intro";
-      for (const s of SECTIONS) {
-        const ref = sectionRefs.current[s.id];
-        if (ref && ref.offsetTop - 90 <= el.scrollTop) found = s.id;
-      }
-      setActiveSection(found);
-    };
-    el.addEventListener("scroll", onScroll);
-    return () => el.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const goTo = (id) => {
-    const ref = sectionRefs.current[id];
-    if (ref && rightRef.current) rightRef.current.scrollTo({ top: ref.offsetTop - 24, behavior: "smooth" });
+    el.style.transition = "transform 0.28s ease, opacity 0.28s ease";
+    el.style.opacity = "0";
+    el.style.transform = `translateX(${-55 * dir}px)`;
+    setTimeout(() => {
+      setExpanded({});           // always start with cards closed
+      setActivePage(to);
+      if (rightRef.current) rightRef.current.scrollTop = 0;
+      el.style.transition = "none";
+      el.style.opacity = "0";
+      el.style.transform = `translateX(${55 * dir}px)`;
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        el.style.transition = "transform 0.38s ease, opacity 0.38s ease";
+        el.style.opacity = "1";
+        el.style.transform = "translateX(0)";
+        // After slide-in finishes, open the target card so user sees it expand
+        if (openKey) {
+          setTimeout(() => setExpanded({ [openKey]: true }), 420);
+        }
+      }));
+    }, 285);
   };
 
-  const toggle = (key) => setExpanded(p => ({ ...p, [key]: !p[key] }));
+  const toggle = (key) => setExpanded(p => {
+    if (p[key]) return { ...p, [key]: false };
+    const prefix = key.replace(/\d+$/, '');
+    const cleared = Object.fromEntries(Object.keys(p).map(k => [k, k.startsWith(prefix) ? false : p[k]]));
+    return { ...cleared, [key]: true };
+  });
   const openCard = (key) => setExpanded(p => ({ ...p, [key]: true }));
+
+  const BackButton = () => (
+    <button onClick={() => navigate("intro", true)}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = T.gold; e.currentTarget.style.color = T.gold; }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.textMid; }}
+      style={{ background: "none", border: `1px solid ${T.border}`, borderRadius: 8, color: T.textMid, fontFamily: "monospace", fontSize: "0.65rem", letterSpacing: "0.08em", cursor: "pointer", padding: "6px 16px", display: "flex", alignItems: "center", gap: "6px", marginBottom: "1.8rem", transition: "all 0.18s" }}>
+      ← Back
+    </button>
+  );
+
+  const renderPage = () => {
+    if (activePage === "intro") {
+      return (
+        <div style={{ display: "flex", flexDirection: "column", gap: "2rem", flex: 1 }}>
+          <div>
+            <p style={{ fontFamily: "monospace", fontSize: "0.62rem", letterSpacing: "0.22em", color: T.gold, textTransform: "uppercase", marginBottom: "0.55rem" }}>Portfolio</p>
+            <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(2rem, 4vw, 3.2rem)", fontWeight: 600, lineHeight: 1.1, margin: 0, color: T.white }}>
+              Hi, I&apos;m <TypewriterName />
+            </h1>
+          </div>
+          <div style={{ marginTop: "-0.6rem" }}>
+            <AnimatedTagline goTo={(id, cardKey) => navigate(id, false, cardKey)}>
+              <DownloadCVButton />
+            </AnimatedTagline>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(3, 1fr)", gridAutoRows: "1fr", gap: "12px", flex: 1 }}>
+            {CTA_BUTTONS.map(({ label, section }) => {
+              const sec = SECTIONS.find(s => s.id === section);
+              return <BigNavButton key={section} label={label} icon={sec?.icon} onClick={() => navigate(section)} />;
+            })}
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        <BackButton />
+        {activePage === "education" && (
+          <>
+            <SLabel>Education</SLabel>
+            {data.education.map((edu, i) => (
+              <EntryCard key={i} initial={edu.initial} color={edu.color}
+                title={edu.school} subtitle={edu.degree} meta={[edu.period, edu.location]}
+                bullets={edu.details} expanded={expanded["edu" + i]} onToggle={() => toggle("edu" + i)} />
+            ))}
+          </>
+        )}
+        {activePage === "experience" && (
+          <>
+            <SLabel>Work Experience</SLabel>
+            {data.experience.map((exp, i) => (
+              <EntryCard key={i} logo={exp.logo} initial={exp.initial} color={exp.color}
+                title={exp.role} subtitle={exp.org} meta={[exp.period, exp.location]}
+                bullets={exp.bullets} expanded={expanded["exp" + i]} onToggle={() => toggle("exp" + i)} />
+            ))}
+          </>
+        )}
+        {activePage === "extracurriculars" && (
+          <>
+            <SLabel>Extracurriculars</SLabel>
+            {data.extracurriculars.map((item, i) => (
+              <EntryCard key={i} initial={item.initial} color={item.color}
+                title={item.title} subtitle={item.org} meta={[item.period]}
+                bullets={item.bullets} expanded={expanded["ext" + i]} onToggle={() => toggle("ext" + i)} />
+            ))}
+          </>
+        )}
+        {activePage === "skills" && (
+          <>
+            <SLabel>Skills &amp; Certifications</SLabel>
+            <p style={{ fontFamily: "monospace", fontSize: "0.7rem", color: T.white, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "0.7rem", fontWeight: 700 }}>Technical</p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "7px", marginBottom: "1rem" }}>
+              {data.skills.technical.map(s => (
+                <span key={s} style={{ padding: "7px 14px", background: T.bgCard, border: `1px solid ${T.border}`, borderRadius: 8, fontSize: "0.79rem", color: T.textMid, transition: "all 0.18s", cursor: "default" }}
+                  onMouseEnter={e => { e.target.style.borderColor = T.gold; e.target.style.color = T.gold; e.target.style.background = T.goldGlow; }}
+                  onMouseLeave={e => { e.target.style.borderColor = T.border; e.target.style.color = T.textMid; e.target.style.background = T.bgCard; }}>{s}</span>
+              ))}
+            </div>
+            <p style={{ fontFamily: "monospace", fontSize: "0.7rem", color: T.white, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "0.7rem", fontWeight: 700 }}>Soft Skills</p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "7px", marginBottom: "1.8rem" }}>
+              {data.skills.soft.map(s => (
+                <span key={s} style={{ padding: "7px 14px", background: T.bgCard, border: `1px solid ${T.border}`, borderRadius: 8, fontSize: "0.79rem", color: T.textMid, transition: "all 0.18s", cursor: "default" }}
+                  onMouseEnter={e => { e.target.style.borderColor = T.goldDim; e.target.style.color = T.gold; e.target.style.background = T.goldGlow; }}
+                  onMouseLeave={e => { e.target.style.borderColor = T.border; e.target.style.color = T.textMid; e.target.style.background = T.bgCard; }}>{s}</span>
+              ))}
+            </div>
+            <p style={{ fontFamily: "monospace", fontSize: "0.7rem", color: T.white, letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "0.7rem", fontWeight: 700 }}>Certifications &amp; Courses</p>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "0.45rem" }}>
+              {data.courses.map((c, i) => (
+                <Card key={i} style={{ padding: "0.85rem 1rem" }}>
+                  <p style={{ fontSize: "0.82rem", fontWeight: 700, color: T.text, marginBottom: "4px" }}>{c.name}</p>
+                  <p style={{ fontFamily: "monospace", fontSize: "0.6rem", color: T.textDim }}>{c.org} · {c.date}</p>
+                </Card>
+              ))}
+            </div>
+          </>
+        )}
+        {activePage === "achievements" && (
+          <>
+            <SLabel>Achievements</SLabel>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+              {data.achievements.map((a, i) => (
+                <Card key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", padding: a.compact ? "0.45rem 1.1rem" : "0.8rem 1.1rem" }}>
+                  <div>
+                    <p style={{ fontSize: a.compact ? "0.8rem" : "0.85rem", fontWeight: 600, color: T.text, margin: 0 }}>{a.title}</p>
+                    {a.note && <p style={{ fontFamily: "monospace", fontSize: "0.6rem", color: T.textDim, margin: "2px 0 0" }}>{a.note}</p>}
+                  </div>
+                  {a.date && <span style={{ fontFamily: "monospace", fontSize: "0.62rem", color: T.gold, whiteSpace: "nowrap", flexShrink: 0 }}>{a.date}</span>}
+                </Card>
+              ))}
+            </div>
+          </>
+        )}
+        {activePage === "contact" && (
+          <>
+            <SLabel>Contact</SLabel>
+            <Card style={{ padding: "1.8rem" }}>
+              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.9rem", color: T.white, fontWeight: 500, margin: "0 0 1.3rem", lineHeight: 1.2 }}>
+                Let&apos;s connect<span style={{ color: T.gold }}>.</span>
+              </p>
+              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "0.8rem" }}>
+                {[
+                  { label: "Email", value: data.email, href: "mailto:" + data.email },
+                  { label: "Phone", value: data.phone, href: "tel:" + data.phone },
+                  { label: "LinkedIn", value: "Arsh Baruah", href: data.linkedin },
+                  { label: "Location", value: data.location, href: null },
+                ].map(({ label, value, href }) => (
+                  <div key={label} style={{ padding: "0.9rem 1rem", background: "#0c0c0c", borderRadius: 8, border: `1px solid ${T.border}` }}>
+                    <p style={{ fontFamily: "monospace", fontSize: "0.57rem", color: T.textDim, letterSpacing: "0.14em", textTransform: "uppercase", margin: "0 0 4px" }}>{label}</p>
+                    {href
+                      ? <a href={href} target="_blank" rel="noopener noreferrer"
+                          style={{ fontSize: "0.8rem", color: T.textMid, textDecoration: "none", transition: "color 0.2s" }}
+                          onMouseEnter={e => e.target.style.color = T.gold}
+                          onMouseLeave={e => e.target.style.color = T.textMid}>{value}</a>
+                      : <p style={{ fontSize: "0.8rem", color: T.textMid, margin: 0 }}>{value}</p>
+                    }
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </>
+        )}
+        <p style={{ fontFamily: "monospace", fontSize: "0.57rem", color: T.textDim, letterSpacing: "0.12em", textAlign: "center", paddingBottom: "1rem", marginTop: "2rem" }}>
+          Last updated: March 2026 · Arsh Baruah
+        </p>
+      </div>
+    );
+  };
 
   return (
     <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", height: "100vh", background: T.bg, fontFamily: "'Lato', sans-serif", color: T.text, overflow: "hidden" }}>
+      <CustomCursor />
       <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
 
       {/* SIDEBAR */}
@@ -425,50 +744,27 @@ export default function Portfolio() {
         gap: isMobile ? "0.8rem 1.5rem" : "1.5rem",
         alignItems: isMobile ? "flex-start" : "stretch",
       }}>
-
         <div>
-          <div style={{ width: isMobile ? 48 : 68, height: isMobile ? 48 : 68, borderRadius: "50%", background: "linear-gradient(135deg, #1a1a2e 0%, #2a1a0e 100%)", border: `2px solid ${T.gold}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: isMobile ? "0.5rem" : "1rem", boxShadow: "0 0 22px rgba(201,169,110,0.25)" }}>
-            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: isMobile ? "1.1rem" : "1.5rem", fontWeight: 700, color: T.gold, letterSpacing: "0.02em" }}>AB</span>
+          <div style={{ width: isMobile ? 48 : 58, height: isMobile ? 48 : 58, borderRadius: "50%", background: "linear-gradient(135deg, #1a1a2e 0%, #2a1a0e 100%)", border: `2px solid ${T.gold}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: isMobile ? "0.5rem" : "0.8rem", boxShadow: "0 0 22px rgba(201,169,110,0.25)" }}>
+            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: isMobile ? "1.1rem" : "1.45rem", fontWeight: 700, color: T.gold, letterSpacing: "0.02em" }}>AB</span>
           </div>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: isMobile ? "1.1rem" : "1.35rem", fontWeight: 600, color: T.white, margin: 0, lineHeight: 1.2 }}>{data.name}</p>
+          <div style={{ display: isMobile ? "none" : "flex", alignItems: "center", gap: "6px" }}>
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.35rem", fontWeight: 600, color: T.white, margin: 0, lineHeight: 1.2 }}>{data.name}</p>
+            <svg title="Verified" width="20" height="20" viewBox="0 0 20 20" fill="none"
+              style={{ flexShrink: 0, marginBottom: "1px", filter: "drop-shadow(0 0 5px rgba(201,169,110,0.55))" }}>
+              <polygon
+                points="10,1 11.68,3.72 14.5,2.21 14.6,5.4 17.79,5.5 16.28,8.32 19,10 16.28,11.68 17.79,14.5 14.6,14.6 14.5,17.79 11.68,16.28 10,19 8.32,16.28 5.5,17.79 5.4,14.6 2.21,14.5 3.72,11.68 1,10 3.72,8.32 2.21,5.5 5.4,5.4 5.5,2.21 8.32,3.72"
+                fill={T.gold}
+              />
+              <path d="M7 10.3L9.1 12.4L13.2 7.8" stroke="#0a0a0a" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
         </div>
-
         <div style={{ display: isMobile ? "none" : "block" }}>
           <SLabel>About</SLabel>
-          <p style={{ fontSize: "0.78rem", color: T.textMid, lineHeight: 1.8, margin: 0, fontWeight: 300 }}>{data.about}</p>
-        </div>
-
-        {/* Contact — fixed 22×22 icon cell, perfectly aligned */}
-        <div>
-          <SLabel>Contact</SLabel>
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem" }}>
-            {[
-              { type: "email",    val: "arshbaruah85@gmail.com",           href: "mailto:arshbaruah85@gmail.com" },
-              { type: "phone",    val: "+91 9773552877",                   href: "tel:+919773552877" },
-              { type: "linkedin", val: "Arsh Baruah",                      href: "https://www.linkedin.com/in/arshbaruah/" },
-              { type: "location", val: "Noida, UP, India",                 href: null },
-            ].map(({ type, val, href }) => (
-              <div key={type} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                <div style={{ width: 22, height: 22, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  {type === "email"    && <span style={{ fontSize: "1.15rem", color: T.gold, lineHeight: 1 }}>✉</span>}
-                  {type === "phone"    && <span style={{ fontSize: "0.9rem", color: T.gold, lineHeight: 1 }}>☏</span>}
-                  {type === "linkedin" && (
-                    <div style={{ width: 19, height: 19, background: T.gold, borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <span style={{ fontSize: "0.62rem", fontWeight: 900, color: T.bg, fontFamily: "'Lato', sans-serif", letterSpacing: 0, lineHeight: 1 }}>in</span>
-                    </div>
-                  )}
-                  {type === "location" && <span style={{ fontSize: "0.82rem", color: T.gold, lineHeight: 1 }}>◎</span>}
-                </div>
-                {href
-                  ? <a href={href} target="_blank" rel="noopener noreferrer"
-                      style={{ fontSize: "0.74rem", color: T.textMid, textDecoration: "none", transition: "color 0.2s", lineHeight: 1.3, marginTop: type === "email" ? "2px" : 0 }}
-                      onMouseEnter={e => e.target.style.color = T.gold}
-                      onMouseLeave={e => e.target.style.color = T.textMid}>{val}</a>
-                  : <span style={{ fontSize: "0.74rem", color: T.textMid, lineHeight: 1.3, marginTop: type === "email" ? "2px" : 0 }}>{val}</span>
-                }
-              </div>
-            ))}
-          </div>
+          <p style={{ fontSize: "0.78rem", color: T.textMid, lineHeight: 1.8, margin: 0, fontWeight: 300 }}>
+            Economics &amp; Finance student interested in event-driven <b style={{ fontWeight: 700, color: T.text }}>investing</b>, corporate <b style={{ fontWeight: 700, color: T.text }}>finance</b>, and <b style={{ fontWeight: 700, color: T.text }}>technology</b>. I debate, volunteer, and organise events. Currently building a startup alongside growing a monetised Instagram page to <b style={{ fontWeight: 700, color: T.text }}>12,000 followers</b> and 5 million views (and counting!).
+          </p>
         </div>
 
         <div style={{ display: isMobile ? "none" : "block" }}>
@@ -489,7 +785,6 @@ export default function Portfolio() {
             ))}
           </div>
         </div>
-
         <div style={{ display: isMobile ? "none" : "block" }}>
           <SLabel>Languages</SLabel>
           <div style={{ display: "flex", flexDirection: "row", gap: "5px" }}>
@@ -501,147 +796,24 @@ export default function Portfolio() {
       </aside>
 
       {/* RIGHT PANEL */}
-      <div ref={rightRef} style={{ flex: 1, overflowY: "auto", padding: isMobile ? "1.5rem 1rem 7rem" : "2rem 2.5rem 7rem 2.5rem" }}>
-
-        {/* INTRO */}
-        <div ref={el => sectionRefs.current["intro"] = el} style={{ marginBottom: "3rem", paddingTop: "0.3rem" }}>
-          <p style={{ fontFamily: "monospace", fontSize: "0.62rem", letterSpacing: "0.22em", color: T.gold, textTransform: "uppercase", marginBottom: "0.55rem" }}>Portfolio</p>
-          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(2rem, 4vw, 3.2rem)", fontWeight: 600, lineHeight: 1.1, margin: "0 0 1.4rem", color: T.white }}>
-            Hi, I&apos;m <span style={{ color: T.gold }}>Arsh Baruah</span>.
-          </h1>
-          <AnimatedTagline goTo={goTo} openCard={openCard} />
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-            {CTA_BUTTONS.map(({ label, section, primary }) => (
-              <CtaButton key={section} label={label} primary={primary} onClick={() => goTo(section)} />
-            ))}
-            <DownloadCVButton />
-          </div>
+      <div ref={rightRef} style={{ flex: 1, overflowY: "auto", padding: activePage === "intro" ? (isMobile ? "1.5rem 1rem 2rem" : "2rem 2.5rem 2rem 2.5rem") : (isMobile ? "1.5rem 1rem 5rem" : "2rem 2.5rem 5rem 2.5rem"), display: "flex", flexDirection: "column" }}>
+        <div ref={pageRef} style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+          {renderPage()}
         </div>
-
-        {/* EDUCATION */}
-        <div ref={el => sectionRefs.current["education"] = el} style={{ marginBottom: "2.5rem" }}>
-          <SLabel>Education</SLabel>
-          {data.education.map((edu, i) => (
-            <EntryCard key={i} initial={edu.initial} color={edu.color}
-              title={edu.school} subtitle={edu.degree} meta={[edu.period, edu.location]}
-              bullets={edu.details} expanded={expanded["edu" + i]} onToggle={() => toggle("edu" + i)} />
-          ))}
-        </div>
-
-        {/* EXPERIENCE */}
-        <div ref={el => sectionRefs.current["experience"] = el} style={{ marginBottom: "2.5rem" }}>
-          <SLabel>Work Experience</SLabel>
-          {data.experience.map((exp, i) => (
-            <EntryCard key={i} logo={exp.logo} initial={exp.initial} color={exp.color}
-              title={exp.role} subtitle={exp.org} meta={[exp.period, exp.location]}
-              bullets={exp.bullets} expanded={expanded["exp" + i]} onToggle={() => toggle("exp" + i)} />
-          ))}
-        </div>
-
-        {/* EXTRACURRICULARS */}
-        <div ref={el => sectionRefs.current["extracurriculars"] = el} style={{ marginBottom: "2.5rem" }}>
-          <SLabel>Extracurriculars</SLabel>
-          {data.extracurriculars.map((item, i) => (
-            <EntryCard key={i} initial={item.initial} color={item.color}
-              title={item.title} subtitle={item.org} meta={[item.period]}
-              bullets={item.bullets} expanded={expanded["ext" + i]} onToggle={() => toggle("ext" + i)} />
-          ))}
-        </div>
-
-        {/* SKILLS */}
-        <div ref={el => sectionRefs.current["skills"] = el} style={{ marginBottom: "2.5rem" }}>
-          <SLabel>Skills</SLabel>
-          <p style={{ fontFamily: "monospace", fontSize: "0.57rem", color: T.textDim, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: "0.5rem" }}>Technical</p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "7px", marginBottom: "1rem" }}>
-            {data.skills.technical.map(s => (
-              <span key={s} style={{ padding: "7px 14px", background: T.bgCard, border: `1px solid ${T.border}`, borderRadius: 8, fontSize: "0.79rem", color: T.textMid, transition: "all 0.18s", cursor: "default" }}
-                onMouseEnter={e => { e.target.style.borderColor = T.gold; e.target.style.color = T.gold; e.target.style.background = T.goldGlow; }}
-                onMouseLeave={e => { e.target.style.borderColor = T.border; e.target.style.color = T.textMid; e.target.style.background = T.bgCard; }}>{s}</span>
-            ))}
-          </div>
-          <p style={{ fontFamily: "monospace", fontSize: "0.57rem", color: T.textDim, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: "0.5rem" }}>Soft Skills</p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "7px" }}>
-            {data.skills.soft.map(s => (
-              <span key={s} style={{ padding: "7px 14px", background: T.bgCard, border: `1px solid ${T.border}`, borderRadius: 8, fontSize: "0.79rem", color: T.textMid, transition: "all 0.18s", cursor: "default" }}
-                onMouseEnter={e => { e.target.style.borderColor = T.goldDim; e.target.style.color = T.gold; e.target.style.background = T.goldGlow; }}
-                onMouseLeave={e => { e.target.style.borderColor = T.border; e.target.style.color = T.textMid; e.target.style.background = T.bgCard; }}>{s}</span>
-            ))}
-          </div>
-        </div>
-
-        {/* CERTIFICATIONS */}
-        <div ref={el => sectionRefs.current["certifications"] = el} style={{ marginBottom: "2.5rem" }}>
-          <SLabel>Certifications & Courses</SLabel>
-          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "0.45rem" }}>
-            {data.courses.map((c, i) => (
-              <Card key={i} style={{ padding: "0.85rem 1rem" }}>
-                <p style={{ fontSize: "0.82rem", fontWeight: 700, color: T.text, marginBottom: "4px" }}>{c.name}</p>
-                <p style={{ fontFamily: "monospace", fontSize: "0.6rem", color: T.textDim }}>{c.org} · {c.date}</p>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* ACHIEVEMENTS */}
-        <div ref={el => sectionRefs.current["achievements"] = el} style={{ marginBottom: "2.5rem" }}>
-          <SLabel>Achievements</SLabel>
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-            {data.achievements.map((a, i) => (
-              <Card key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", padding: a.compact ? "0.45rem 1.1rem" : "0.8rem 1.1rem" }}>
-                <div>
-                  <p style={{ fontSize: a.compact ? "0.8rem" : "0.85rem", fontWeight: 600, color: T.text, margin: 0 }}>{a.title}</p>
-                  {a.note && <p style={{ fontFamily: "monospace", fontSize: "0.6rem", color: T.textDim, margin: "2px 0 0" }}>{a.note}</p>}
-                </div>
-                {a.date && <span style={{ fontFamily: "monospace", fontSize: "0.62rem", color: T.gold, whiteSpace: "nowrap", flexShrink: 0 }}>{a.date}</span>}
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* CONTACT */}
-        <div ref={el => sectionRefs.current["contact"] = el} style={{ marginBottom: "2.5rem" }}>
-          <SLabel>Contact</SLabel>
-          <Card style={{ padding: "1.8rem" }}>
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.9rem", color: T.white, fontWeight: 500, margin: "0 0 1.3rem", lineHeight: 1.2 }}>
-              Let&apos;s connect<span style={{ color: T.gold }}>.</span>
-            </p>
-            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "0.8rem" }}>
-              {[
-                { label: "Email",    value: data.email,                   href: "mailto:" + data.email },
-                { label: "Phone",    value: data.phone,                   href: "tel:" + data.phone },
-                { label: "LinkedIn", value: "Arsh Baruah", href: data.linkedin },
-                { label: "Location", value: data.location,                href: null },
-              ].map(({ label, value, href }) => (
-                <div key={label} style={{ padding: "0.9rem 1rem", background: "#0c0c0c", borderRadius: 8, border: `1px solid ${T.border}` }}>
-                  <p style={{ fontFamily: "monospace", fontSize: "0.57rem", color: T.textDim, letterSpacing: "0.14em", textTransform: "uppercase", margin: "0 0 4px" }}>{label}</p>
-                  {href
-                    ? <a href={href} target="_blank" rel="noopener noreferrer"
-                        style={{ fontSize: "0.8rem", color: T.textMid, textDecoration: "none", transition: "color 0.2s" }}
-                        onMouseEnter={e => e.target.style.color = T.gold}
-                        onMouseLeave={e => e.target.style.color = T.textMid}>{value}</a>
-                    : <p style={{ fontSize: "0.8rem", color: T.textMid, margin: 0 }}>{value}</p>
-                  }
-                </div>
-              ))}
-            </div>
-          </Card>
-        </div>
-
-        <p style={{ fontFamily: "monospace", fontSize: "0.57rem", color: T.textDim, letterSpacing: "0.12em", textAlign: "center", paddingBottom: "1rem" }}>
-          Last updated: March 2026 · Arsh Baruah
-        </p>
       </div>
 
-      {/* FLOATING NAV */}
-      <div style={{ position: "fixed", bottom: "1.4rem", left: "50%", transform: "translateX(-50%)", zIndex: 200, background: "rgba(12,12,12,0.96)", border: `1px solid ${T.border}`, borderRadius: 40, padding: "7px 12px", backdropFilter: "blur(16px)", display: "flex", gap: "2px", boxShadow: "0 8px 40px rgba(0,0,0,0.6)" }}>
-        {SECTIONS.map(s => (
-          <button key={s.id} onClick={() => goTo(s.id)} title={s.label}
-            style={{ background: activeSection === s.id ? T.goldGlow : "transparent", border: activeSection === s.id ? `1px solid ${T.goldDim}` : "1px solid transparent", borderRadius: 30, padding: "5px 11px", cursor: "pointer", transition: "all 0.18s", display: "flex", alignItems: "center", gap: "4px" }}>
-            <span style={{ fontSize: "0.6rem", color: activeSection === s.id ? T.gold : T.textDim }}>{s.icon}</span>
-            <span style={{ fontSize: "0.57rem", fontFamily: "monospace", letterSpacing: "0.06em", color: activeSection === s.id ? T.gold : T.textDim, textTransform: "uppercase" }}>{s.label}</span>
-          </button>
-        ))}
-      </div>
+      {/* FLOATING NAV — hidden on intro */}
+      {activePage !== "intro" && (
+        <div style={{ position: "fixed", bottom: isMobile ? "0.5rem" : "1.4rem", left: "50%", transform: "translateX(-50%)", zIndex: 200, background: "rgba(12,12,12,0.96)", border: `1px solid ${T.border}`, borderRadius: 40, padding: "7px 12px", backdropFilter: "blur(16px)", display: "flex", gap: "2px", boxShadow: "0 8px 40px rgba(0,0,0,0.6)" }}>
+          {SECTIONS.filter(s => s.id !== "intro" && s.id !== "certifications").map(s => (
+            <button key={s.id} onClick={() => navigate(s.id)} title={s.label}
+              style={{ background: activePage === s.id ? T.goldGlow : "transparent", border: activePage === s.id ? `1px solid ${T.goldDim}` : "1px solid transparent", borderRadius: 30, padding: "5px 11px", cursor: "pointer", transition: "all 0.18s", display: "flex", alignItems: "center", gap: "4px" }}>
+              <span style={{ fontSize: "0.6rem", color: activePage === s.id ? T.gold : T.textDim }}>{s.icon}</span>
+              <span style={{ fontSize: "0.57rem", fontFamily: "monospace", letterSpacing: "0.06em", color: activePage === s.id ? T.gold : T.textDim, textTransform: "uppercase" }}>{s.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
