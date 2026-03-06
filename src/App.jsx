@@ -748,12 +748,12 @@ export default function Portfolio() {
         gap: isMobile ? "0.8rem 1.5rem" : "1.5rem",
         alignItems: isMobile ? "flex-start" : "stretch",
       }}>
-        <div>
-          <div style={{ width: isMobile ? 48 : 58, height: isMobile ? 48 : 58, borderRadius: "50%", background: "linear-gradient(135deg, #1a1a2e 0%, #2a1a0e 100%)", border: `2px solid ${T.gold}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: isMobile ? "0.5rem" : "0.8rem", boxShadow: "0 0 22px rgba(201,169,110,0.25)" }}>
-            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: isMobile ? "1.1rem" : "1.45rem", fontWeight: 700, color: T.gold, letterSpacing: "0.02em" }}>AB</span>
+        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "10px" : "0px", flexDirection: isMobile ? "row" : "column", alignItems: isMobile ? "center" : "flex-start" }}>
+          <div style={{ width: isMobile ? 44 : 58, height: isMobile ? 44 : 58, borderRadius: "50%", background: "linear-gradient(135deg, #1a1a2e 0%, #2a1a0e 100%)", border: `2px solid ${T.gold}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: isMobile ? "0" : "0.8rem", flexShrink: 0, boxShadow: "0 0 22px rgba(201,169,110,0.25)" }}>
+            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: isMobile ? "1.05rem" : "1.45rem", fontWeight: 700, color: T.gold, letterSpacing: "0.02em" }}>AB</span>
           </div>
-          <div style={{ display: isMobile ? "none" : "flex", alignItems: "center", gap: "6px" }}>
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.35rem", fontWeight: 600, color: T.white, margin: 0, lineHeight: 1.2 }}>{data.name}</p>
+          <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: isMobile ? "1.1rem" : "1.35rem", fontWeight: 600, color: T.white, margin: 0, lineHeight: 1.2 }}>{data.name}</p>
             <svg title="Verified" width="20" height="20" viewBox="0 0 20 20" fill="none"
               style={{ flexShrink: 0, marginBottom: "1px", filter: "drop-shadow(0 0 5px rgba(201,169,110,0.55))" }}>
               <polygon
@@ -800,7 +800,7 @@ export default function Portfolio() {
       </aside>
 
       {/* RIGHT PANEL */}
-      <div ref={rightRef} style={{ flex: 1, overflowY: "auto", padding: activePage === "intro" ? (isMobile ? "1.5rem 1rem 2rem" : "2rem 2.5rem 2rem 2.5rem") : (isMobile ? "1.5rem 1rem 5rem" : "2rem 2.5rem 5rem 2.5rem"), display: "flex", flexDirection: "column" }}>
+      <div ref={rightRef} style={{ flex: 1, overflowY: "auto", padding: activePage === "intro" ? (isMobile ? "1.5rem 1rem 5rem" : "2rem 2.5rem 2rem 2.5rem") : (isMobile ? "1.5rem 1rem 5rem" : "2rem 2.5rem 5rem 2.5rem"), display: "flex", flexDirection: "column" }}>
         <div ref={pageRef} style={{ display: "flex", flexDirection: "column", flex: 1 }}>
           {renderPage()}
         </div>
