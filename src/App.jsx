@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 
+// True only on devices that support real hover (non-touch)
+const canHover = window.matchMedia("(hover: hover)").matches;
+
 const T = {
   bg: "#0a0a0a", bgCard: "#141414", bgCardHover: "#1c1c1c",
   sidebar: "#0f0f0f", border: "#222",
@@ -210,7 +213,7 @@ function LogoAvatar({ logo, initial, color, size = 36 }) {
 function Card({ children, style = {}, onClick }) {
   const [hov, setHov] = useState(false);
   return (
-    <div onClick={onClick} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+    <div onClick={onClick} onMouseEnter={() => { if (canHover) setHov(true); }} onMouseLeave={() => { if (canHover) setHov(false); }}
       style={{
         background: hov ? T.bgCardHover : T.bgCard,
         border: `1px solid ${hov ? "#2e2e2e" : T.border}`,
@@ -470,7 +473,7 @@ function TypewriterName() {
 function BigNavButton({ label, icon, onClick }) {
   const [hov, setHov] = useState(false);
   return (
-    <button onClick={onClick} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+    <button onClick={onClick} onMouseEnter={() => { if (canHover) setHov(true); }} onMouseLeave={() => { if (canHover) setHov(false); }}
       style={{
         padding: "0 16px",
         height: "100%",
@@ -748,7 +751,15 @@ export default function Portfolio() {
         alignItems: isMobile ? "flex-start" : "stretch",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "10px" : "0px", flexDirection: isMobile ? "row" : "column", alignItems: isMobile ? "center" : "flex-start" }}>
-          <div style={{ width: isMobile ? 44 : 58, height: isMobile ? 44 : 58, borderRadius: "50%", background: "linear-gradient(135deg, #1a1a2e 0%, #2a1a0e 100%)", border: `2px solid ${T.gold}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: isMobile ? "0" : "0.8rem", flexShrink: 0, boxShadow: "0 0 22px rgba(201,169,110,0.25)" }}>
+          <div
+            onClick={() => {
+              if (activePage === "intro") {
+                if (rightRef.current) rightRef.current.scrollTop = 0;
+              } else {
+                navigate("intro", true);
+              }
+            }}
+            style={{ width: isMobile ? 44 : 58, height: isMobile ? 44 : 58, borderRadius: "50%", background: "linear-gradient(135deg, #1a1a2e 0%, #2a1a0e 100%)", border: `2px solid ${T.gold}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: isMobile ? "0" : "0.8rem", flexShrink: 0, boxShadow: "0 0 22px rgba(201,169,110,0.25)", cursor: "pointer" }}>
             <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: isMobile ? "1.05rem" : "1.45rem", fontWeight: 700, color: T.gold, letterSpacing: "0.02em" }}>AB</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
