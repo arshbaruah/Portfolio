@@ -502,8 +502,11 @@ function BigNavButton({ label, icon, onClick }) {
 }
 
 function CustomCursor() {
+  // Don't render on touch devices — cursor has no meaning there
+  const isTouch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
   const dotRef = useRef(null);
   useEffect(() => {
+    if (isTouch) return;
     const move = (e) => {
       if (dotRef.current) {
         dotRef.current.style.left = e.clientX + "px";
@@ -516,6 +519,7 @@ function CustomCursor() {
     document.addEventListener("mouseleave", hide);
     return () => { window.removeEventListener("mousemove", move); document.removeEventListener("mouseleave", hide); };
   }, []);
+  if (isTouch) return null;
   return (
     <div ref={dotRef} style={{
       position: "fixed", width: 9, height: 9, borderRadius: "50%",
