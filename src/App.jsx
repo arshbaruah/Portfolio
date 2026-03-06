@@ -800,7 +800,7 @@ export default function Portfolio() {
       </aside>
 
       {/* RIGHT PANEL */}
-      <div ref={rightRef} style={{ flex: 1, overflowY: "auto", padding: activePage === "intro" ? (isMobile ? "1.5rem 1rem 5rem" : "2rem 2.5rem 2rem 2.5rem") : (isMobile ? "1.5rem 1rem 5rem" : "2rem 2.5rem 5rem 2.5rem"), display: "flex", flexDirection: "column" }}>
+      <div ref={rightRef} style={{ flex: 1, overflowY: "scroll", WebkitOverflowScrolling: "touch", padding: activePage === "intro" ? (isMobile ? "1.5rem 1rem 5rem" : "2rem 2.5rem 2rem 2.5rem") : (isMobile ? "1.5rem 1rem 5rem" : "2rem 2.5rem 5rem 2.5rem"), display: "flex", flexDirection: "column" }}>
         <div ref={pageRef} style={{ display: "flex", flexDirection: "column", flex: 1 }}>
           {renderPage()}
         </div>
