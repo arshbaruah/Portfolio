@@ -390,76 +390,32 @@ function DownloadCVButton() {
 
 
 function TypewriterName() {
-  const phases = [
-    { full: "a student",   split: 2 },
-    { full: "a learner",   split: 2 },
-    { full: "a musician",  split: 2 },
-    { full: "a builder",   split: 2 },
-    { full: "an artist",   split: 3 },
-    { full: "Arsh Baruah", split: 0 },
-  ];
-  const [phaseIdx, setPhaseIdx]     = useState(0);
-  const [charCount, setCharCount]   = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isDone, setIsDone]         = useState(false);
-  const [cursorOn, setCursorOn]     = useState(true);
+  const name = "Arsh Baruah";
+  const [charCount, setCharCount] = useState(0);
+  const [isDone, setIsDone]       = useState(false);
+  const [cursorOn, setCursorOn]   = useState(true);
 
-  // Blinking cursor — always runs
   useEffect(() => {
     const blink = setInterval(() => setCursorOn(v => !v), 520);
     return () => clearInterval(blink);
   }, []);
 
-  // Typing / deleting machine
-  // charCount goes 0 → fullLen (word) → fullLen+1 (period) then deletes back
   useEffect(() => {
-    if (isDone) return;
-    const phase    = phases[phaseIdx];
-    const fullLen  = phase.full.length;
-    const isFinal  = phaseIdx === phases.length - 1;
-    const totalLen = fullLen + 1; // +1 for the period
-
-    let t;
-    if (!isDeleting) {
-      if (charCount < fullLen) {
-        // Type word characters
-        t = setTimeout(() => setCharCount(c => c + 1), isFinal ? 140 : 110);
-      } else if (charCount === fullLen) {
-        // Type the period with a natural keystroke delay
-        t = setTimeout(() => setCharCount(c => c + 1), 160);
-      } else {
-        // Period shown (charCount === totalLen)
-        if (!isFinal) {
-          t = setTimeout(() => setIsDeleting(true), 700);
-        } else {
-          setIsDone(true);
-        }
-      }
-    } else {
-      if (charCount > 0) {
-        t = setTimeout(() => setCharCount(c => c - 1), 55);
-      } else {
-        t = setTimeout(() => {
-          setPhaseIdx(i => i + 1);
-          setIsDeleting(false);
-        }, 280);
-      }
+    if (charCount < name.length) {
+      const t = setTimeout(() => setCharCount(c => c + 1), 130);
+      return () => clearTimeout(t);
+    } else if (charCount === name.length && !isDone) {
+      const t = setTimeout(() => setIsDone(true), 400);
+      return () => clearTimeout(t);
     }
-    return () => clearTimeout(t);
-  }, [phaseIdx, charCount, isDeleting, isDone]);
+  }, [charCount, isDone]);
 
-  const phase      = phases[phaseIdx];
-  const displayed  = phase.full.slice(0, Math.min(charCount, phase.full.length));
-  const split      = phase.split;
-  const whitePart  = displayed.slice(0, Math.min(split, displayed.length));
-  const goldPart   = displayed.slice(split);
-  const showPeriod = charCount > phase.full.length; // period is the +1 char
+  const displayed = name.slice(0, charCount);
 
   return (
     <span>
-      {whitePart && <span style={{ color: T.white }}>{whitePart}</span>}
-      {goldPart  && <span style={{ color: T.gold  }}>{goldPart}</span>}
-      {showPeriod && <span style={{ color: T.white }}>.</span>}
+      <span style={{ color: T.gold }}>{displayed}</span>
+      {isDone && <span style={{ color: T.white }}>.</span>}
       <span style={{
         display: "inline-block", width: "2px",
         height: "0.72em", background: T.gold,
@@ -597,7 +553,7 @@ export default function Portfolio() {
           <div>
             <p style={{ fontFamily: "monospace", fontSize: "0.62rem", letterSpacing: "0.22em", color: T.gold, textTransform: "uppercase", marginBottom: "0.55rem" }}>Portfolio</p>
             <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(2rem, 4vw, 3.2rem)", fontWeight: 600, lineHeight: 1.1, margin: 0, color: T.white }}>
-              Hi, I&apos;m <TypewriterName />
+              I am <TypewriterName />
             </h1>
           </div>
           <div style={{ marginTop: "-0.6rem" }}>
