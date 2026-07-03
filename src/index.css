@@ -79,7 +79,8 @@ button {
 }
 
 .page {
-  padding: 5.5rem 0 2.5rem;
+  padding-top: 5.5rem;
+  padding-bottom: 2.5rem;
   animation: pageIn 0.45s ease both;
 }
 
@@ -195,7 +196,8 @@ button {
 
 /* ---------- Hero ---------- */
 .hero {
-  padding: 6.5rem 0 1rem;
+  padding-top: 6.5rem;
+  padding-bottom: 1rem;
 }
 
 .hero h1 {
@@ -252,7 +254,8 @@ button {
 
 /* ---------- Sections ---------- */
 .section {
-  padding: 1.6rem 0;
+  padding-top: 1.6rem;
+  padding-bottom: 1.6rem;
   scroll-margin-top: 72px;
 }
 
@@ -284,7 +287,8 @@ button {
 
 /* ---------- Home preview sections ---------- */
 .preview-block {
-  padding: 1.4rem 0;
+  padding-top: 1.4rem;
+  padding-bottom: 1.4rem;
   border-top: 1px solid var(--border);
 }
 
@@ -554,7 +558,8 @@ button {
 
 /* ---------- Contact ---------- */
 .contact {
-  padding: 2rem 0 2.5rem;
+  padding-top: 2rem;
+  padding-bottom: 2.5rem;
   border-top: 1px solid var(--border);
 }
 
