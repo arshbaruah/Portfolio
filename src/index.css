@@ -259,8 +259,17 @@ button {
   scroll-margin-top: 72px;
 }
 
+/* Divider lines drawn inside the padding box so they align with the text edges */
 .section.ruled {
-  border-top: 1px solid var(--border);
+  padding-top: 0;
+}
+
+.section.ruled::before {
+  content: "";
+  display: block;
+  height: 1px;
+  background: var(--border);
+  margin-bottom: 1.6rem;
 }
 
 .section-label {
@@ -291,9 +300,16 @@ button {
 
 /* ---------- Home preview sections ---------- */
 .preview-block {
-  padding-top: 1.4rem;
+  padding-top: 0;
   padding-bottom: 1.4rem;
-  border-top: 1px solid var(--border);
+}
+
+.preview-block::before {
+  content: "";
+  display: block;
+  height: 1px;
+  background: var(--border);
+  margin-bottom: 1.4rem;
 }
 
 .preview-block .intro {
@@ -562,9 +578,16 @@ button {
 
 /* ---------- Contact ---------- */
 .contact {
-  padding-top: 2rem;
+  padding-top: 0;
   padding-bottom: 2.5rem;
-  border-top: 1px solid var(--border);
+}
+
+.contact::before {
+  content: "";
+  display: block;
+  height: 1px;
+  background: var(--border);
+  margin-bottom: 2rem;
 }
 
 .contact p {
