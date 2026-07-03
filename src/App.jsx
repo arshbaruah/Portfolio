@@ -11,11 +11,18 @@ import Extracurriculars from "./pages/Extracurriculars";
 function ScrollManager() {
   const { pathname, hash } = useLocation();
 
+  // Always start at the top on refresh instead of restoring scroll/hash
+  useEffect(() => {
+    window.history.scrollRestoration = "manual";
+  }, []);
+
   useEffect(() => {
     if (hash) {
       requestAnimationFrame(() => {
         const el = document.querySelector(hash);
         if (el) el.scrollIntoView({ behavior: "smooth" });
+        // Strip the hash so a refresh lands at the top, not at the section
+        window.history.replaceState(null, "", pathname);
       });
     } else {
       window.scrollTo(0, 0);
