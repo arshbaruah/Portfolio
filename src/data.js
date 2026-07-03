@@ -86,21 +86,21 @@ export const projects = [
     date: "Mar 2026 – Present",
     desc: "A subscription management app for the Indian market. Started from a personal pain point around subscription overload; currently refining the MVP for an early user rollout.",
     status: "In development",
-    tech: ["React", "Python", "Razorpay", "DPDP Act 2023 compliant"],
+    tech: ["Subscription Management", "MVP Stage"],
   },
   {
     title: "The Inflection Point",
     date: "2025 – Present",
     desc: "A peer stock analysis initiative. A small group of us research and discuss equity ideas together, mostly as a way to learn valuation by doing.",
     status: "Active",
-    tech: ["Equity Research", "Valuation"],
+    tech: ["Stock Analysis", "Peer Learning"],
   },
   {
     title: "MVP Podcast",
     date: "2024 – 2025",
     desc: "Launched the Entrepreneurship Cell's podcast. Our first guest was a founder whose agency has helped startups raise over $77M.",
     status: "Completed",
-    tech: ["Content", "Interviewing"],
+    tech: ["Podcast", "Entrepreneurship"],
   },
 ];
 
