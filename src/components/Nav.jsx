@@ -8,7 +8,7 @@ const LINKS = [
   { to: "/#about", label: "About" },
 ];
 
-const CLOSE_MS = 220;
+const CLOSE_MS = 150;
 
 export default function Nav() {
   const [theme, setTheme] = useState(

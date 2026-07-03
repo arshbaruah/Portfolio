@@ -687,7 +687,7 @@ button {
   }
 
   .nav-links.open.closing {
-    animation: menuOut 0.22s ease forwards;
+    animation: menuOut 0.15s cubic-bezier(0.4, 0, 1, 1) forwards;
   }
 
   @keyframes menuIn {
