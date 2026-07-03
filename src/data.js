@@ -1,82 +1,82 @@
 // ---------------------------------------------------------------------------
 // All site content lives here. Edit this file to update the portfolio.
-// Items marked TODO are drafted from the redesign brief — verify dates/links.
 // ---------------------------------------------------------------------------
 
 export const socials = {
   linkedin: "https://www.linkedin.com/in/arshbaruah/",
-  github: "https://github.com/arshbaruah",
   instagram: "https://www.instagram.com/arshb.mp4/",
   email: "arshbaruah85@gmail.com",
 };
 
 export const about = {
   tagline: ["Economics", "Finance", "Music", "Building Azat"],
-  bio: "I'm an Economics & Finance student at Shiv Nadar University, interested in event-driven investing, corporate finance, and technology. I'm currently building Azat, a subscription management startup, while growing a monetised Instagram page past 12,000 followers and 5 million views. Off the clock, I play guitar, debate, and organise events.",
-  highlights: [
-    "Secretary, Inspiria — SNIoE Business Club",
-    "Founder, Azat",
-    "Content Creator — 12K followers",
-  ],
+  currently: "Currently interning at The Body Shop and building Azat.",
+  bio: "I'm an Economics & Finance undergraduate at Shiv Nadar University (Class of 2028), curious about corporate finance, investing, and technology. These days I'm learning by building Azat, a subscription management app, and by creating music content that has somehow found an audience of 12,000 people. I also debate, volunteer, and help organise events on campus.",
+  education: "BSc Economics & Finance, Shiv Nadar University · Class of 2028",
+  cv: "/ArshBaruah_CV_Final.pdf",
 };
 
-export const featured = [
-  {
-    title: "The Body Shop + Voyita",
-    desc: "Market basket analysis and retail data science across two concurrent internships.",
+// Homepage preview sections
+export const home = {
+  career: {
+    intro: "Internships across banking, retail, and development work.",
+    items: [
+      { title: "The Body Shop (Quest Retail)", note: "Store analytics and market basket analysis" },
+      { title: "Voyita", note: "Founders' Office at a group travel startup" },
+      { title: "SMBC", note: "Finance intern, bank financial statement audit" },
+    ],
     link: "/internships",
-    linkLabel: "View internships",
+    linkLabel: "All internships",
   },
-  {
-    title: "Azat",
-    desc: "Subscription management platform for the Indian market, currently in development.",
+  personalProjects: {
+    intro: "Things I'm building and writing outside class.",
+    items: [
+      { title: "Azat", note: "Subscription management app, in development" },
+      { title: "The Inflection Point", note: "Peer stock analysis with friends" },
+    ],
     link: "/projects",
-    linkLabel: "View projects",
+    linkLabel: "All projects",
   },
-  {
-    title: "Music & Content",
-    desc: "Guitarist and creator — 12K followers, brand collabs with Sony Sab, Thums Up, and more.",
+  extracurriculars: {
+    intro: "Campus roles, music, and the occasional stage.",
+    items: [
+      { title: "Inspiria, The Business Club", note: "Secretary, SNIoE Business Conclave 2025" },
+      { title: "Entrepreneurship Cell", note: "Content Lead, launched the MVP Podcast" },
+      { title: "Music & content", note: "Guitarist and creator, brand collaborations" },
+    ],
     link: "/music",
-    linkLabel: "View music",
+    linkLabel: "Music & more",
   },
-];
+};
 
 export const internships = [
   {
-    role: "Data Analytics Intern", // TODO: confirm exact title
+    role: "Intern",
     org: "The Body Shop (Quest Retail)",
-    period: "May 2026 – Present", // TODO: confirm dates
+    period: "Jun 2026 – Aug 2026",
     current: true,
-    desc: "Working on retail analytics for The Body Shop's India operations. Built a market basket analysis pipeline to surface product affinities and inform cross-sell strategy.",
-    metric: "Market basket analysis using Python/mlxtend",
-    tech: ["Python", "Pandas", "mlxtend", "Scikit-learn"],
+    desc: "Created store visit reports and worked on store analytics, using AI to run market basket analysis. Analysed de-growth stage stores and helped put interventions in place to lift sales. To get a fuller picture of the FMCG sector, I also spent time with the marketing/branding and accounts/corporate finance teams.",
   },
   {
-    role: "Intern", // TODO: confirm exact title
+    role: "Founders' Office Intern",
     org: "Voyita",
-    period: "2026", // TODO: confirm dates
+    period: "2026",
     current: true,
-    desc: "Concurrent internship alongside The Body Shop role.", // TODO: add 2-3 sentence description
-    metric: null,
-    tech: ["Python", "Pandas"],
+    desc: "Voyita is a group travel management startup. I helped across operations, content, and marketing, and worked on bringing in sales qualified leads.",
   },
   {
     role: "Finance Intern",
     org: "Sumitomo Mitsui Banking Corporation (SMBC)",
     period: "May 2025 – Jul 2025",
     current: false,
-    desc: "Contributed to the ICFR segment of the bank's financial statement audit and co-developed a peer comparison benchmarking SMBC against competitor institutions. Delivered an executive summary of the Yes Bank crisis under the Managing Director's guidance.",
-    metric: "Nostro account reconciliation on Oracle",
-    tech: ["Excel", "Oracle", "Financial Research"],
+    desc: "Contributed to the ICFR segment of the bank's financial statement audit and co-developed a peer comparison benchmarking SMBC against other institutions. Prepared an executive summary of the Yes Bank crisis under the Managing Director's guidance, and practised Nostro account reconciliation on Oracle.",
   },
   {
     role: "Research Intern",
     org: "Grameen Foundation India",
     period: "Jun 2024 – Jul 2024",
     current: false,
-    desc: "Supported women entrepreneurs across Delhi on a JP Morgan-funded project, researching online marketing channels and developing strategies for key business challenges.",
-    metric: "JP Morgan-funded field project",
-    tech: ["Research", "Data Analysis", "Fieldwork"],
+    desc: "Supported women entrepreneurs across Delhi on a JP Morgan funded project, researching online marketing channels and helping develop strategies for their key business challenges.",
   },
 ];
 
@@ -84,32 +84,43 @@ export const projects = [
   {
     title: "Azat",
     date: "Mar 2026 – Present",
-    desc: "Subscription management platform for the Indian market — track, manage, and cancel subscriptions in one place.",
+    desc: "A subscription management app for the Indian market. Started from a personal pain point around subscription overload; currently refining the MVP for an early user rollout.",
     status: "In development",
     tech: ["React", "Python", "Razorpay", "DPDP Act 2023 compliant"],
-    metric: "MVP rollout to early users planned",
-    link: null, // TODO: add demo link when live
-    linkLabel: "View demo",
   },
   {
     title: "The Inflection Point",
-    date: "2025 – Present", // TODO: confirm dates
-    desc: "Peer stock analysis initiative — collaborative equity research and idea discussion with fellow students.", // TODO: refine description
+    date: "2025 – Present",
+    desc: "A peer stock analysis initiative. A small group of us research and discuss equity ideas together, mostly as a way to learn valuation by doing.",
     status: "Active",
-    tech: ["Equity Research", "Valuation", "Financial Modelling"],
-    metric: null,
-    link: null, // TODO: add link if available
-    linkLabel: "Read more",
+    tech: ["Equity Research", "Valuation"],
   },
   {
     title: "MVP Podcast",
     date: "2024 – Present",
-    desc: "Launched the Entrepreneurship Cell's podcast; interviewed a founder whose agency helped startups raise $77M+.",
+    desc: "Launched the Entrepreneurship Cell's podcast. Our first guest was a founder whose agency has helped startups raise over $77M.",
     status: "Active",
-    tech: ["Content", "Interviewing", "Production"],
-    metric: "$77M+ raised by featured founder's clients",
-    link: null,
-    linkLabel: "Listen",
+    tech: ["Content", "Interviewing"],
+  },
+];
+
+// Learning programs and recognitions
+export const programs = [
+  {
+    title: "McKinsey Forward Program",
+    note: "Structured program on problem solving, communication, and adaptability.",
+  },
+  {
+    title: "IIM Udaipur Summer School",
+    note: "Completed the summer school with a Top 10% award.",
+  },
+  {
+    title: "Financial Markets (with Honours), Yale University",
+    note: "Online course, 2023.",
+  },
+  {
+    title: "Introduction to Corporate Finance, Wharton",
+    note: "Online course, 2024.",
   },
 ];
 
@@ -117,34 +128,17 @@ export const music = {
   handle: "@arshb.mp4",
   followers: "12K",
   views: "5M+",
-  blurb: "Content creator and guitarist. Grew a monetised Instagram page to 12,000 followers and 5 million views through consistent, self-driven content.",
+  blurb: "I play guitar and make music content on Instagram. What started as a hobby grew into a page with 12,000 followers and over 5 million views, along with a few brand collaborations I'm grateful for.",
   collabs: [
-    {
-      brand: "Sony Sab",
-      desc: "Branded content collaboration for the television network.", // TODO: 1-line detail
-      link: "https://www.instagram.com/arshb.mp4/", // TODO: link specific reel
-    },
-    {
-      brand: "Thums Up",
-      desc: "Campaign collaboration with the iconic Indian cola brand.",
-      link: "https://www.instagram.com/arshb.mp4/",
-    },
-    {
-      brand: "Dhurandhar",
-      desc: "Promotional content for the film release.",
-      link: "https://www.instagram.com/arshb.mp4/",
-    },
-    {
-      brand: "Gini",
-      desc: "Brand partnership content.",
-      link: "https://www.instagram.com/arshb.mp4/",
-    },
+    { brand: "Sony Sab", desc: "Branded content for the television network." },
+    { brand: "Thums Up", desc: "Campaign collaboration with the cola brand." },
+    { brand: "Dhurandhar", desc: "Promotional content for the film's release." },
+    { brand: "Gini", desc: "Brand partnership content." },
   ],
   achievements: [
-    { title: "School Topper — 98.5% in Class XII", note: "Mayoor School, 2024" },
-    { title: "Synapse 2026 — podium finish", note: "2026" }, // TODO: confirm detail
-    { title: "Prayag Sangeet Samiti — distinctions", note: "Vocal music" },
-    { title: "Invited to perform live at a Delhi University college", note: "Feb 2026" },
+    { title: "School Topper, 98.5% in Class XII", note: "Mayoor School, 2024" },
+    { title: "Vocal Music, 3rd Year Pass", note: "Prayag Sangeet Samiti" },
+    { title: "Performed live at a Delhi University college", note: "Feb 2026" },
     { title: "Article featured in Hindustan Times", note: "2021" },
   ],
 };

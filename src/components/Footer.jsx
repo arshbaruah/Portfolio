@@ -8,9 +8,6 @@ export default function Footer() {
           <a href={socials.linkedin} target="_blank" rel="noreferrer">
             LinkedIn
           </a>
-          <a href={socials.github} target="_blank" rel="noreferrer">
-            GitHub
-          </a>
           <a href={socials.instagram} target="_blank" rel="noreferrer">
             Instagram
           </a>

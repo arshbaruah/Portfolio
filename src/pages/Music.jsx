@@ -33,19 +33,10 @@ export default function Music() {
         <div className="card-grid">
           {music.collabs.map((c) => (
             <Reveal key={c.brand}>
-              <a
-                href={c.link}
-                target="_blank"
-                rel="noreferrer"
-                className="card"
-                style={{ height: "100%" }}
-              >
+              <div className="card" style={{ height: "100%" }}>
                 <h3>{c.brand}</h3>
                 <p className="desc">{c.desc}</p>
-                <span className="card-link">
-                  View post <span aria-hidden>→</span>
-                </span>
-              </a>
+              </div>
             </Reveal>
           ))}
         </div>

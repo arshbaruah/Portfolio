@@ -5,10 +5,10 @@ export default function Projects() {
   return (
     <main className="container page">
       <Reveal>
-        <p className="section-label">Ventures</p>
+        <p className="section-label">Personal Projects</p>
         <h2>Projects</h2>
       </Reveal>
-      <div className="card-grid" style={{ marginTop: "2rem" }}>
+      <div className="card-grid" style={{ marginTop: "1.25rem" }}>
         {projects.map((p) => (
           <Reveal key={p.title}>
             <div className="card" style={{ height: "100%" }}>
@@ -17,7 +17,6 @@ export default function Projects() {
                 {p.date} · {p.status}
               </p>
               <p className="desc">{p.desc}</p>
-              {p.metric && <p className="metric">{p.metric}</p>}
               <div className="tags">
                 {p.tech.map((t) => (
                   <span key={t} className="tag">
@@ -25,16 +24,6 @@ export default function Projects() {
                   </span>
                 ))}
               </div>
-              {p.link && (
-                <a
-                  href={p.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="card-link"
-                >
-                  {p.linkLabel} <span aria-hidden>→</span>
-                </a>
-              )}
             </div>
           </Reveal>
         ))}

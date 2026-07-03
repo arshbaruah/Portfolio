@@ -1,6 +1,29 @@
 import { Link } from "react-router-dom";
 import Reveal from "../components/Reveal";
-import { about, featured } from "../data";
+import { about, home, socials } from "../data";
+
+function PreviewBlock({ label, title, data }) {
+  return (
+    <section className="container preview-block">
+      <Reveal>
+        <p className="section-label">{label}</p>
+        <h2>{title}</h2>
+        <p className="intro">{data.intro}</p>
+        <div className="list-rows">
+          {data.items.map((item) => (
+            <div key={item.title} className="list-row">
+              <span className="r-title">{item.title}</span>
+              <span className="r-note">{item.note}</span>
+            </div>
+          ))}
+        </div>
+        <Link to={data.link} className="more-link">
+          {data.linkLabel} <span aria-hidden>→</span>
+        </Link>
+      </Reveal>
+    </section>
+  );
+}
 
 export default function Home() {
   return (
@@ -16,9 +39,15 @@ export default function Home() {
             </span>
           ))}
         </p>
-        <a href="#work" className="cta">
-          View Work <span aria-hidden>↓</span>
-        </a>
+        <p className="currently">{about.currently}</p>
+        <div className="hero-actions">
+          <a href="#about" className="cta">
+            About me <span aria-hidden>↓</span>
+          </a>
+          <a href={about.cv} target="_blank" rel="noreferrer" className="cta secondary">
+            Download CV
+          </a>
+        </div>
       </section>
 
       {/* About */}
@@ -26,35 +55,36 @@ export default function Home() {
         <Reveal>
           <p className="section-label">About</p>
           <p className="bio">{about.bio}</p>
-          <div className="highlights">
-            {about.highlights.map((h) => (
-              <span key={h} className="highlight-pill">
-                {h}
-              </span>
-            ))}
-          </div>
+          <p className="edu-line">{about.education}</p>
         </Reveal>
       </section>
 
-      {/* Featured work */}
-      <section id="work" className="container section">
+      {/* Three subheads */}
+      <PreviewBlock label="Career" title="Career" data={home.career} />
+      <PreviewBlock
+        label="Personal Projects"
+        title="Personal Projects"
+        data={home.personalProjects}
+      />
+      <PreviewBlock
+        label="Extracurriculars"
+        title="Extracurriculars"
+        data={home.extracurriculars}
+      />
+
+      {/* Contact */}
+      <section className="container contact">
         <Reveal>
-          <p className="section-label">Featured</p>
-          <h2>Selected Work</h2>
+          <p className="section-label">Contact</p>
+          <p>
+            The best way to reach me is by email at{" "}
+            <a href={`mailto:${socials.email}`}>{socials.email}</a>, or on{" "}
+            <a href={socials.linkedin} target="_blank" rel="noreferrer">
+              LinkedIn
+            </a>
+            .
+          </p>
         </Reveal>
-        <div className="card-grid">
-          {featured.map((f) => (
-            <Reveal key={f.title}>
-              <Link to={f.link} className="card" style={{ height: "100%" }}>
-                <h3>{f.title}</h3>
-                <p className="desc">{f.desc}</p>
-                <span className="card-link">
-                  {f.linkLabel} <span aria-hidden>→</span>
-                </span>
-              </Link>
-            </Reveal>
-          ))}
-        </div>
       </section>
     </main>
   );

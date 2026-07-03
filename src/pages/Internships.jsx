@@ -1,5 +1,5 @@
 import Reveal from "../components/Reveal";
-import { internships } from "../data";
+import { internships, programs } from "../data";
 
 export default function Internships() {
   return (
@@ -8,32 +8,39 @@ export default function Internships() {
         <p className="section-label">Career</p>
         <h2>Internships</h2>
       </Reveal>
-      <div className="timeline" style={{ marginTop: "2rem" }}>
+      <div className="job-list">
         {internships.map((job) => (
-          <Reveal key={job.org} as="div">
-            <div className="timeline-item">
-              <div className="card">
-                <h3>
-                  {job.role} · {job.org}
-                </h3>
-                <p className="card-meta">
+          <Reveal key={job.org}>
+            <div className="job">
+              <div className="job-head">
+                <h3>{job.org}</h3>
+                <span className="job-period">
                   {job.period}
                   {job.current && " · Current"}
-                </p>
-                <p className="desc">{job.desc}</p>
-                {job.metric && <p className="metric">{job.metric}</p>}
-                <div className="tags">
-                  {job.tech.map((t) => (
-                    <span key={t} className="tag">
-                      {t}
-                    </span>
-                  ))}
-                </div>
+                </span>
               </div>
+              <p className="job-role">{job.role}</p>
+              <p className="desc">{job.desc}</p>
             </div>
           </Reveal>
         ))}
       </div>
+
+      <section className="section">
+        <Reveal>
+          <p className="section-label">Programs & Courses</p>
+        </Reveal>
+        <div className="achieve-list">
+          {programs.map((p) => (
+            <Reveal key={p.title}>
+              <div className="achieve-item">
+                <span className="a-title">{p.title}</span>
+                <span className="a-note">{p.note}</span>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
     </main>
   );
 }
