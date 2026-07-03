@@ -67,12 +67,11 @@ export default function Home() {
         <Reveal>
           <p className="section-label">Contact</p>
           <p>
-            The best way to reach me is by email at{" "}
-            <a href={`mailto:${socials.email}`}>{socials.email}</a>, or on{" "}
+            <a href={`mailto:${socials.email}`}>{socials.email}</a>
+            {" · "}
             <a href={socials.linkedin} target="_blank" rel="noreferrer">
               LinkedIn
             </a>
-            .
           </p>
         </Reveal>
       </section>

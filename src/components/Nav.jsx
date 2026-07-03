@@ -32,7 +32,7 @@ export default function Nav() {
           Arsh Baruah
         </Link>
         <button
-          className="hamburger"
+          className={`hamburger${open ? " open" : ""}`}
           aria-label="Menu"
           onClick={() => setOpen((o) => !o)}
         >

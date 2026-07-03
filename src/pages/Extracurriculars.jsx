@@ -52,10 +52,10 @@ export default function Extracurriculars() {
         <Reveal>
           <p className="section-label">Notable Collabs</p>
         </Reveal>
-        <div className="card-grid">
+        <div className="card-grid tight">
           {extras.collabs.map((c) => (
             <Reveal key={c.brand}>
-              <div className="card" style={{ height: "100%" }}>
+              <div className="card compact" style={{ height: "100%" }}>
                 <h3>{c.brand}</h3>
                 <p className="desc">{c.desc}</p>
               </div>

@@ -9,7 +9,7 @@ export const socials = {
 };
 
 export const about = {
-  tagline: ["Economics", "Finance", "Building Stuff", "Solving Problems", "Creating Content"],
+  tagline: ["Building Stuff", "Solving Problems", "Creating Content"],
   bio: "I'm an Economics & Finance undergraduate at Shiv Nadar University (Class of 2028), curious about corporate finance, investing, and technology. These days I'm learning by building Azat, a subscription management app, and by creating music content that has somehow found an audience of 12,000 people. I also debate, volunteer, and help organise events on campus.",
   education: "BSc Economics & Finance, Shiv Nadar University · Class of 2028",
   cv: "/ArshBaruah_CV_Final.pdf",
@@ -55,28 +55,28 @@ export const internships = [
     org: "The Body Shop (Quest Retail)",
     period: "Jun 2026 – Aug 2026",
     current: true,
-    desc: "Store visit reports, store analytics, and AI assisted market basket analysis. Analysed de-growth stage stores and helped plan interventions to lift sales, with time across the marketing and corporate finance teams.",
+    desc: "Store visit reports, store analytics, and AI assisted market basket analysis, with time across the marketing and corporate finance teams.",
   },
   {
     role: "Founders' Office Intern",
     org: "Voyita",
     period: "2026",
     current: true,
-    desc: "Helped across operations, content, and marketing at a group travel management startup, and worked on bringing in sales qualified leads.",
+    desc: "Operations, content, marketing, and sales qualified leads at a group travel management startup.",
   },
   {
     role: "Finance Intern",
     org: "SMBC",
     period: "May 2025 – Jul 2025",
     current: false,
-    desc: "Worked on the ICFR segment of the bank's financial statement audit, a peer comparison study, and Nostro account reconciliation on Oracle.",
+    desc: "ICFR work on the bank's financial statement audit, a peer comparison study, and Nostro reconciliation on Oracle.",
   },
   {
     role: "Research Intern",
     org: "Grameen Foundation India",
     period: "Jun 2024 – Jul 2024",
     current: false,
-    desc: "Researched online marketing channels for women entrepreneurs across Delhi on a JP Morgan funded project.",
+    desc: "Marketing research for women entrepreneurs across Delhi on a JP Morgan funded project.",
   },
 ];
 

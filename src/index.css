@@ -41,9 +41,11 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
+  overflow-x: hidden;
   font-family: var(--sans);
   background: var(--bg);
   color: var(--text);
@@ -179,6 +181,16 @@ button {
   font-size: 1rem;
   align-items: center;
   justify-content: center;
+  transition: transform 0.25s ease, border-color 0.2s;
+}
+
+.hamburger:active {
+  transform: scale(0.9);
+}
+
+.hamburger.open {
+  transform: rotate(90deg);
+  border-color: var(--border-strong);
 }
 
 /* ---------- Hero ---------- */
@@ -187,9 +199,11 @@ button {
 }
 
 .hero h1 {
+  font-family: "Space Grotesk", var(--sans);
   font-size: clamp(2.6rem, 6.5vw, 3.8rem);
   font-weight: 600;
   line-height: 1.08;
+  letter-spacing: -0.03em;
 }
 
 .hero .tagline {
@@ -371,6 +385,26 @@ button {
   flex: 1;
 }
 
+/* Compact card variant (collabs) */
+.card-grid.tight {
+  gap: 0.6rem;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+}
+
+.card.compact {
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+}
+
+.card.compact h3 {
+  font-size: 0.95rem;
+}
+
+.card.compact p.desc {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
 /* ---------- Tags (projects only) ---------- */
 .tags {
   display: flex;
@@ -400,7 +434,7 @@ button {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 1.1rem 1.3rem;
+  padding: 0.95rem 1.15rem;
   box-shadow: var(--shadow);
   transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 }
@@ -420,7 +454,7 @@ button {
 }
 
 .job h3 {
-  font-size: 1.2rem;
+  font-size: 1.02rem;
   font-weight: 600;
 }
 
@@ -437,9 +471,9 @@ button {
 }
 
 .job p.desc {
-  font-size: 0.87rem;
+  font-size: 0.84rem;
   color: var(--text-mid);
-  margin-top: 0.55rem;
+  margin-top: 0.4rem;
 }
 
 /* ---------- Achievements / simple lists ---------- */
