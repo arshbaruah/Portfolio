@@ -39,9 +39,6 @@ export default function Home() {
           ))}
         </p>
         <div className="hero-actions">
-          <a href="#about" className="cta">
-            About Me <span aria-hidden>↓</span>
-          </a>
           <a href={about.cv} target="_blank" rel="noreferrer" className="cta secondary">
             Download CV
           </a>
@@ -49,7 +46,7 @@ export default function Home() {
       </section>
 
       {/* About */}
-      <section id="about" className="container section">
+      <section id="about" className="container section ruled">
         <Reveal>
           <p className="section-label">About</p>
           <p className="bio">{about.bio}</p>

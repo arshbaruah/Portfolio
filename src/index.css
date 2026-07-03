@@ -259,6 +259,10 @@ button {
   scroll-margin-top: 72px;
 }
 
+.section.ruled {
+  border-top: 1px solid var(--border);
+}
+
 .section-label {
   font-size: 0.72rem;
   font-weight: 600;
@@ -656,6 +660,18 @@ button {
 
   .nav-links.open {
     display: flex;
+    animation: menuIn 0.28s cubic-bezier(0.3, 0, 0.2, 1);
+  }
+
+  @keyframes menuIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   .nav-link {
