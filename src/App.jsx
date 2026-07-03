@@ -5,7 +5,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Internships from "./pages/Internships";
 import Projects from "./pages/Projects";
-import Music from "./pages/Music";
+import Extracurriculars from "./pages/Extracurriculars";
 
 /** Scrolls to top on route change, or to the hash target if present. */
 function ScrollManager() {
@@ -13,7 +13,6 @@ function ScrollManager() {
 
   useEffect(() => {
     if (hash) {
-      // Wait a tick for the page to render
       requestAnimationFrame(() => {
         const el = document.querySelector(hash);
         if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -35,7 +34,8 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/internships" element={<Internships />} />
         <Route path="/projects" element={<Projects />} />
-        <Route path="/music" element={<Music />} />
+        <Route path="/extracurriculars" element={<Extracurriculars />} />
+        <Route path="/music" element={<Extracurriculars />} />
         <Route path="*" element={<Home />} />
       </Routes>
       <Footer />

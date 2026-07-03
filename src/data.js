@@ -9,9 +9,7 @@ export const socials = {
 };
 
 export const about = {
-  tagline: ["Economics", "Finance", "Music", "Building Azat"],
-  subline: "Building Stuff - Solving Problems",
-  currently: "Currently interning at The Body Shop and building Azat.",
+  tagline: ["Economics", "Finance", "Building Stuff", "Solving Problems", "Creating Content"],
   bio: "I'm an Economics & Finance undergraduate at Shiv Nadar University (Class of 2028), curious about corporate finance, investing, and technology. These days I'm learning by building Azat, a subscription management app, and by creating music content that has somehow found an audience of 12,000 people. I also debate, volunteer, and help organise events on campus.",
   education: "BSc Economics & Finance, Shiv Nadar University · Class of 2028",
   cv: "/ArshBaruah_CV_Final.pdf",
@@ -22,9 +20,9 @@ export const home = {
   career: {
     intro: "Internships across banking, retail, and development work.",
     items: [
-      { title: "The Body Shop (Quest Retail)", note: "Store analytics and market basket analysis" },
-      { title: "Voyita", note: "Founders' Office at a group travel startup" },
-      { title: "SMBC", note: "Finance intern, bank financial statement audit" },
+      { title: "The Body Shop (Quest Retail)", note: "Operations Intern" },
+      { title: "Voyita", note: "Founders' Office Intern" },
+      { title: "SMBC", note: "Finance Intern" },
     ],
     link: "/internships",
     linkLabel: "All Internships",
@@ -32,8 +30,9 @@ export const home = {
   personalProjects: {
     intro: "Things I'm building and writing outside class.",
     items: [
-      { title: "Azat", note: "Subscription management app, in development" },
-      { title: "The Inflection Point", note: "Peer stock analysis with friends" },
+      { title: "Azat", note: "Founder" },
+      { title: "The Inflection Point", note: "Peer Stock Analysis" },
+      { title: "MVP Podcast", note: "Host" },
     ],
     link: "/projects",
     linkLabel: "All Projects",
@@ -41,12 +40,12 @@ export const home = {
   extracurriculars: {
     intro: "Campus roles, music, and the occasional stage.",
     items: [
-      { title: "Inspiria, The Business Club", note: "Secretary, SNIoE Business Conclave 2025" },
-      { title: "Entrepreneurship Cell", note: "Content Lead, launched the MVP Podcast" },
-      { title: "Music & content", note: "Guitarist and creator, brand collaborations" },
+      { title: "Inspiria, The Business Club", note: "Secretary" },
+      { title: "Entrepreneurship Cell", note: "Content Lead" },
+      { title: "@arshb.mp4", note: "Content Creator" },
     ],
-    link: "/music",
-    linkLabel: "Music & More",
+    link: "/extracurriculars",
+    linkLabel: "More",
   },
 };
 
@@ -56,28 +55,28 @@ export const internships = [
     org: "The Body Shop (Quest Retail)",
     period: "Jun 2026 – Aug 2026",
     current: true,
-    desc: "Created store visit reports and worked on store analytics, using AI to run market basket analysis. Analysed de-growth stage stores and helped put interventions in place to lift sales. To get a fuller picture of the FMCG sector, I also spent time with the marketing/branding and accounts/corporate finance teams.",
+    desc: "Store visit reports, store analytics, and AI assisted market basket analysis. Analysed de-growth stage stores and helped plan interventions to lift sales, with time across the marketing and corporate finance teams.",
   },
   {
     role: "Founders' Office Intern",
     org: "Voyita",
     period: "2026",
     current: true,
-    desc: "Voyita is a group travel management startup. I helped across operations, content, and marketing, and worked on bringing in sales qualified leads.",
+    desc: "Helped across operations, content, and marketing at a group travel management startup, and worked on bringing in sales qualified leads.",
   },
   {
     role: "Finance Intern",
-    org: "Sumitomo Mitsui Banking Corporation (SMBC)",
+    org: "SMBC",
     period: "May 2025 – Jul 2025",
     current: false,
-    desc: "Contributed to the ICFR segment of the bank's financial statement audit and co-developed a peer comparison benchmarking SMBC against other institutions. Prepared an executive summary of the Yes Bank crisis under the Managing Director's guidance, and practised Nostro account reconciliation on Oracle.",
+    desc: "Worked on the ICFR segment of the bank's financial statement audit, a peer comparison study, and Nostro account reconciliation on Oracle.",
   },
   {
     role: "Research Intern",
     org: "Grameen Foundation India",
     period: "Jun 2024 – Jul 2024",
     current: false,
-    desc: "Supported women entrepreneurs across Delhi on a JP Morgan funded project, researching online marketing channels and helping develop strategies for their key business challenges.",
+    desc: "Researched online marketing channels for women entrepreneurs across Delhi on a JP Morgan funded project.",
   },
 ];
 
@@ -98,9 +97,9 @@ export const projects = [
   },
   {
     title: "MVP Podcast",
-    date: "2024 – Present",
+    date: "2024 – 2025",
     desc: "Launched the Entrepreneurship Cell's podcast. Our first guest was a founder whose agency has helped startups raise over $77M.",
-    status: "Active",
+    status: "Completed",
     tech: ["Content", "Interviewing"],
   },
 ];
@@ -109,27 +108,46 @@ export const projects = [
 export const programs = [
   {
     title: "McKinsey Forward Program",
-    note: "Structured program on problem solving, communication, and adaptability.",
+    note: "Problem solving, communication, adaptability",
   },
   {
     title: "IIM Udaipur Summer School",
-    note: "Completed the summer school with a Top 10% award.",
+    note: "Top 10% award",
   },
   {
     title: "Financial Markets (with Honours), Yale University",
-    note: "Online course, 2023.",
+    note: "Online course, 2023",
   },
   {
     title: "Introduction to Corporate Finance, Wharton",
-    note: "Online course, 2024.",
+    note: "Online course, 2024",
   },
 ];
 
-export const music = {
-  handle: "@arshb.mp4",
-  followers: "12K",
-  views: "5M+",
-  blurb: "I play guitar and make music content on Instagram. What started as a hobby grew into a page with 12,000 followers and over 5 million views, along with a few brand collaborations I'm grateful for.",
+export const extras = {
+  roles: [
+    {
+      title: "Inspiria, The Business Club",
+      role: "Secretary",
+      note: "Helped organise the SNIoE Business Conclave 2025 with 400+ attendees.",
+    },
+    {
+      title: "Entrepreneurship Cell",
+      role: "Content Lead",
+      note: "Drove digital content and launched the MVP Podcast.",
+    },
+    {
+      title: "Debating & Public Speaking",
+      role: "",
+      note: "15+ debate wins across school and university events.",
+    },
+  ],
+  content: {
+    handle: "@arshb.mp4",
+    followers: "12K",
+    views: "5M+",
+    blurb: "I make guitar and music content on Instagram. What started as a hobby grew into a monetised page with a few brand collaborations along the way.",
+  },
   collabs: [
     { brand: "Sony Sab", desc: "Branded content for the television network." },
     { brand: "Thums Up", desc: "Campaign collaboration with the cola brand." },
@@ -141,5 +159,13 @@ export const music = {
     { title: "Vocal Music, 3rd Year Pass", note: "Prayag Sangeet Samiti" },
     { title: "Performed live at a Delhi University college", note: "Feb 2026" },
     { title: "Article featured in Hindustan Times", note: "2021" },
+  ],
+  hobbies: [
+    "Guitar & Music",
+    "Solving Sudoku",
+    "Public Speaking",
+    "Debating",
+    "Content Creation",
+    "Volunteering",
   ],
 };

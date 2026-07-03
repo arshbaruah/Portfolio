@@ -13,7 +13,6 @@
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.08);
   --nav-bg: rgba(250, 250, 250, 0.82);
-  --serif: "EB Garamond", Georgia, serif;
   --sans: "Inter", system-ui, -apple-system, sans-serif;
 }
 
@@ -53,13 +52,8 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Serif reserved for big section titles only; everything else stays minimal */
-h2 {
-  font-family: var(--serif);
-  letter-spacing: 0;
-}
-
 h1,
+h2,
 h3 {
   font-family: var(--sans);
   letter-spacing: -0.02em;
@@ -189,7 +183,7 @@ button {
 
 /* ---------- Hero ---------- */
 .hero {
-  padding: 7rem 0 2.5rem;
+  padding: 6.5rem 0 1rem;
 }
 
 .hero h1 {
@@ -209,23 +203,10 @@ button {
   margin: 0 0.4rem;
 }
 
-.hero .subline {
-  margin-top: 0.45rem;
-  font-size: 0.95rem;
-  color: var(--text);
-  font-weight: 500;
-}
-
-.hero .currently {
-  margin-top: 0.5rem;
-  font-size: 0.86rem;
-  color: var(--text-dim);
-}
-
 .hero-actions {
   display: flex;
   gap: 0.75rem;
-  margin-top: 1.6rem;
+  margin-top: 1.4rem;
   flex-wrap: wrap;
 }
 
@@ -257,7 +238,8 @@ button {
 
 /* ---------- Sections ---------- */
 .section {
-  padding: 2rem 0;
+  padding: 1.6rem 0;
+  scroll-margin-top: 72px;
 }
 
 .section-label {
@@ -292,15 +274,9 @@ button {
   border-top: 1px solid var(--border);
 }
 
-.preview-block h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-
 .preview-block .intro {
   font-size: 0.88rem;
   color: var(--text-mid);
-  margin-top: 0.15rem;
 }
 
 .list-rows {
@@ -517,6 +493,29 @@ button {
 .stat .lbl {
   font-size: 0.78rem;
   color: var(--text-dim);
+}
+
+/* ---------- Hobby pills ---------- */
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pill {
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  font-size: 0.8rem;
+  color: var(--text-mid);
+  font-weight: 500;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.pill:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
 }
 
 /* ---------- Contact ---------- */
