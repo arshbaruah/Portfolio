@@ -669,7 +669,8 @@ button {
   }
 
   .hero {
-    padding: 5.5rem 0 2rem;
+    padding-top: 5.5rem;
+    padding-bottom: 2rem;
   }
 
   .list-row,
