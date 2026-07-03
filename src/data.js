@@ -10,6 +10,7 @@ export const socials = {
 
 export const about = {
   tagline: ["Economics", "Finance", "Music", "Building Azat"],
+  subline: "Building Stuff - Solving Problems",
   currently: "Currently interning at The Body Shop and building Azat.",
   bio: "I'm an Economics & Finance undergraduate at Shiv Nadar University (Class of 2028), curious about corporate finance, investing, and technology. These days I'm learning by building Azat, a subscription management app, and by creating music content that has somehow found an audience of 12,000 people. I also debate, volunteer, and help organise events on campus.",
   education: "BSc Economics & Finance, Shiv Nadar University · Class of 2028",
@@ -26,7 +27,7 @@ export const home = {
       { title: "SMBC", note: "Finance intern, bank financial statement audit" },
     ],
     link: "/internships",
-    linkLabel: "All internships",
+    linkLabel: "All Internships",
   },
   personalProjects: {
     intro: "Things I'm building and writing outside class.",
@@ -35,7 +36,7 @@ export const home = {
       { title: "The Inflection Point", note: "Peer stock analysis with friends" },
     ],
     link: "/projects",
-    linkLabel: "All projects",
+    linkLabel: "All Projects",
   },
   extracurriculars: {
     intro: "Campus roles, music, and the occasional stage.",
@@ -45,13 +46,13 @@ export const home = {
       { title: "Music & content", note: "Guitarist and creator, brand collaborations" },
     ],
     link: "/music",
-    linkLabel: "Music & more",
+    linkLabel: "Music & More",
   },
 };
 
 export const internships = [
   {
-    role: "Intern",
+    role: "Operations Intern",
     org: "The Body Shop (Quest Retail)",
     period: "Jun 2026 – Aug 2026",
     current: true,

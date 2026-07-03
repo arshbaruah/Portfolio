@@ -2,11 +2,10 @@ import { Link } from "react-router-dom";
 import Reveal from "../components/Reveal";
 import { about, home, socials } from "../data";
 
-function PreviewBlock({ label, title, data }) {
+function PreviewBlock({ title, data }) {
   return (
     <section className="container preview-block">
       <Reveal>
-        <p className="section-label">{label}</p>
         <h2>{title}</h2>
         <p className="intro">{data.intro}</p>
         <div className="list-rows">
@@ -39,10 +38,11 @@ export default function Home() {
             </span>
           ))}
         </p>
+        <p className="subline">{about.subline}</p>
         <p className="currently">{about.currently}</p>
         <div className="hero-actions">
           <a href="#about" className="cta">
-            About me <span aria-hidden>↓</span>
+            About Me <span aria-hidden>↓</span>
           </a>
           <a href={about.cv} target="_blank" rel="noreferrer" className="cta secondary">
             Download CV
@@ -60,17 +60,9 @@ export default function Home() {
       </section>
 
       {/* Three subheads */}
-      <PreviewBlock label="Career" title="Career" data={home.career} />
-      <PreviewBlock
-        label="Personal Projects"
-        title="Personal Projects"
-        data={home.personalProjects}
-      />
-      <PreviewBlock
-        label="Extracurriculars"
-        title="Extracurriculars"
-        data={home.extracurriculars}
-      />
+      <PreviewBlock title="Career" data={home.career} />
+      <PreviewBlock title="Personal Projects" data={home.personalProjects} />
+      <PreviewBlock title="Extracurriculars" data={home.extracurriculars} />
 
       {/* Contact */}
       <section className="container contact">

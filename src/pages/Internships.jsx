@@ -13,13 +13,14 @@ export default function Internships() {
           <Reveal key={job.org}>
             <div className="job">
               <div className="job-head">
-                <h3>{job.org}</h3>
+                <h3>
+                  {job.org} - {job.role}
+                </h3>
                 <span className="job-period">
                   {job.period}
                   {job.current && " · Current"}
                 </span>
               </div>
-              <p className="job-role">{job.role}</p>
               <p className="desc">{job.desc}</p>
             </div>
           </Reveal>
