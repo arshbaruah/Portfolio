@@ -8,11 +8,14 @@ const LINKS = [
   { to: "/#about", label: "About" },
 ];
 
+const CLOSE_MS = 220;
+
 export default function Nav() {
   const [theme, setTheme] = useState(
     () => document.documentElement.dataset.theme || "light"
   );
   const [open, setOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -20,10 +23,37 @@ export default function Nav() {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  // Close mobile menu on navigation
+  // Close menu instantly on navigation
   useEffect(() => {
     setOpen(false);
+    setClosing(false);
   }, [location]);
+
+  // Animated close
+  const closeMenu = () => {
+    setClosing(true);
+    setTimeout(() => {
+      setOpen(false);
+      setClosing(false);
+    }, CLOSE_MS);
+  };
+
+  const toggleMenu = () => {
+    if (open && !closing) {
+      closeMenu();
+    } else if (!open) {
+      setOpen(true);
+      setClosing(false);
+    }
+  };
+
+  // Auto-close when the user scrolls with the menu open
+  useEffect(() => {
+    if (!open || closing) return;
+    const onScroll = () => closeMenu();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [open, closing]);
 
   return (
     <header className="nav">
@@ -32,13 +62,17 @@ export default function Nav() {
           Arsh Baruah
         </Link>
         <button
-          className={`hamburger${open ? " open" : ""}`}
+          className={`hamburger${open && !closing ? " open" : ""}`}
           aria-label="Menu"
-          onClick={() => setOpen((o) => !o)}
+          onClick={toggleMenu}
         >
-          {open ? "✕" : "☰"}
+          {open && !closing ? "✕" : "☰"}
         </button>
-        <nav className={`nav-links${open ? " open" : ""}`}>
+        <nav
+          className={`nav-links${open ? " open" : ""}${
+            closing ? " closing" : ""
+          }`}
+        >
           {LINKS.map((l) =>
             l.to.startsWith("/#") ? (
               <Link key={l.to} to={l.to} className="nav-link">
